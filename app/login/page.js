@@ -42,6 +42,7 @@ const Login = () => {
               className="fill-stroke mx-auto text-gray-800 md:float-left"
               width={180}
               height={120}
+              alt='logo'
               src="/sdev-high-resolution-logo-black-transparent.png"
             />
           </div>

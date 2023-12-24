@@ -20,7 +20,7 @@ const Navbar = ({ cookie }) => {
     if (cookie) {
       dispatch(setToken(cookie.value));
     }
-  }, [cookie]);
+  }, [cookie, dispatch]);
   useEffect(() => {
     const handler = () => {
       dispatch(setScreen(window.innerWidth));
@@ -34,7 +34,7 @@ const Navbar = ({ cookie }) => {
     if (isOpen && screen >= 768) {
       onClose();
     }
-  }, [screen]);
+  }, [screen, isOpen]);
 
   const logoutHandler = () => {
     Cookies.remove("sdev");

@@ -2,7 +2,7 @@
 import React, { useState } from "react";
 import { Button } from "@chakra-ui/react";
 import { useAddContactsMutation } from "@redux/api";
-const page = () => {
+const Contact = () => {
   const [formData, setFormData] = useState({
     through: "",
     description: "",
@@ -130,4 +130,4 @@ const page = () => {
   );
 };
 
-export default page;
+export default Contact;

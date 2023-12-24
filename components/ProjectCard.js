@@ -1,13 +1,14 @@
 "use client";
 import { Heading, Button, Text } from "@chakra-ui/react";
-import React from "react";
 import { BiLinkExternal } from "react-icons/bi";
 import { BsCodeSlash } from "react-icons/bs";
+import Image from "next/image";
 const ProjectCard = ({ data }) => {
   return (
     <div className="w-full cursor-pointer mx-1 sm:mx-1 min-h-[480px] shadow-md drop-shadow-md rounded-sm">
-      <img
-        className="w-full h-[200px]"
+      <Image
+        width="100%"
+        height={200}
         src={data.image.url ? data.image.url : "bg1.avif"}
         alt="default"
       />
