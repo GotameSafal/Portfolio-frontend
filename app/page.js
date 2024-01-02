@@ -65,7 +65,7 @@ export default function Home() {
               variant="outline"
               colorScheme="gray"
               size="sm"
-              onClick={() => router.push("/router")}
+              onClick={() => router.push("/resume")}
             >
               Resume
             </Button>
