@@ -11,9 +11,10 @@ import {
 } from "@utils/iconExp.js";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import Loader from "@components/Loader";
 export default function Home() {
   const router = useRouter();
-  const { data } = useGetDetailsQuery();
+  const { data, isLoading } = useGetDetailsQuery();
   return (
     <main className="">
       <section className="md:h-screen h-[80vh] lg:justify-start justify-center flex items-center">
@@ -80,29 +81,33 @@ export default function Home() {
           >
             Skills
           </Heading>
-          <div className="flex gap-y-6 gap-4 sm:flex-row flex-col justify-between">
-            <SkillCard
-              iconName={<BiCodeAlt size={20} />}
-              iconClass={"bg-blue-100 text-blue-500"}
-              skillName={"Frontend Developmnt"}
-              skillClass={"text-gray-800"}
-              data={data?.details?.skills?.frontend}
-            />
-            <SkillCard
-              iconName={<IoServerOutline size={20} />}
-              iconClass={"bg-yellow-100 text-yellow-500"}
-              skillName={"Backend Development"}
-              skillClass={"text-gray-800"}
-              data={data?.details?.skills?.backend}
-            />
-            <SkillCard
-              iconName={<PiDotsThreeOutlineDuotone size={20} />}
-              iconClass={"bg-red-100 text-red-500"}
-              skillName={"Others"}
-              skillClass={"text-gray-800"}
-              data={data?.details?.skills?.others}
-            />
-          </div>
+          {isLoading ? (
+            <Loader />
+          ) : (
+            <div className="flex gap-y-6 gap-4 sm:flex-row flex-col justify-between">
+              <SkillCard
+                iconName={<BiCodeAlt size={20} />}
+                iconClass={"bg-blue-100 text-blue-500"}
+                skillName={"Frontend Developmnt"}
+                skillClass={"text-gray-800"}
+                data={data?.details?.skills?.frontend}
+              />
+              <SkillCard
+                iconName={<IoServerOutline size={20} />}
+                iconClass={"bg-yellow-100 text-yellow-500"}
+                skillName={"Backend Development"}
+                skillClass={"text-gray-800"}
+                data={data?.details?.skills?.backend}
+              />
+              <SkillCard
+                iconName={<PiDotsThreeOutlineDuotone size={20} />}
+                iconClass={"bg-red-100 text-red-500"}
+                skillName={"Others"}
+                skillClass={"text-gray-800"}
+                data={data?.details?.skills?.others}
+              />
+            </div>
+          )}
         </div>
       </section>
       <section id="projects" className="py-4">
@@ -114,12 +119,16 @@ export default function Home() {
             Projects
           </Heading>
 
-          <div className="gap-y-6 grid sm:grid-cols-2 lg:grid-cols-3 grid-cols-1 justify-center gap-x-4">
-            {data &&
-              data?.details?.projects?.map((project, index) => (
-                <ProjectCard key={index} data={project} />
-              ))}
-          </div>
+          {isLoading ? (
+            <Loader />
+          ) : (
+            <div className="gap-y-6 grid sm:grid-cols-2 lg:grid-cols-3 grid-cols-1 justify-center gap-x-4">
+              {data &&
+                data?.details?.projects?.map((project, index) => (
+                  <ProjectCard key={index} data={project} />
+                ))}
+            </div>
+          )}
         </div>
       </section>
       <section
@@ -134,12 +143,16 @@ export default function Home() {
           >
             Contact me
           </Heading>
-          <div className="grid lg:grid-cols-3 sm:grid-cols-2 grid-cols-1 gap-x-4 gap-y-6">
-            {data &&
-              data?.details?.contacts?.map((contact, index) => (
-                <ContactCard key={index} data={contact} />
-              ))}
-          </div>
+          {isLoading ? (
+            <Loader />
+          ) : (
+            <div className="grid lg:grid-cols-3 sm:grid-cols-2 grid-cols-1 gap-x-4 gap-y-6">
+              {data &&
+                data?.details?.contacts?.map((contact, index) => (
+                  <ContactCard key={index} data={contact} />
+                ))}
+            </div>
+          )}
         </div>
       </section>
     </main>
