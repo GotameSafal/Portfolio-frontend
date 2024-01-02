@@ -10,7 +10,9 @@ import {
   PiDotsThreeOutlineDuotone,
 } from "@utils/iconExp.js";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 export default function Home() {
+  const router = useRouter();
   const { data } = useGetDetailsQuery();
   return (
     <main className="">
@@ -63,6 +65,7 @@ export default function Home() {
               variant="outline"
               colorScheme="gray"
               size="sm"
+              onClick={() => router.push("/router")}
             >
               Resume
             </Button>
