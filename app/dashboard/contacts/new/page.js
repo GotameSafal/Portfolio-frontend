@@ -1,6 +1,7 @@
 "use client";
 import React, { useState } from "react";
 import { Button } from "@chakra-ui/react";
+import {toast} from 'react-hot-toast';
 import { useAddContactsMutation } from "@redux/api";
 const Contact = () => {
   const [formData, setFormData] = useState({
