@@ -1,16 +1,15 @@
 "use client";
-import { Button } from "@chakra-ui/react";
 import { AddIcon } from "@chakra-ui/icons";
-import { useRouter } from "next/navigation";
-import { GrUpdate } from "react-icons/gr";
-import { useState } from "react";
 import {
   useCreateDetailsMutation,
   useDeleteContactsMutation,
   useDeleteProjectMutation,
   useGetDetailsQuery,
 } from "@redux/api";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
 import toast from "react-hot-toast";
+import { GrUpdate } from "react-icons/gr";
 const Dashboard = () => {
   const router = useRouter();
   const [filedata, setFiledata] = useState({
@@ -74,14 +73,14 @@ const Dashboard = () => {
       <div>
         <h1 className="font-semibold text-lg">Skills</h1>
         <div className="flex gap-4">
-          <Button
+          <button
             onClick={() => router.push("/dashboard/skills")}
             leftIcon={<GrUpdate />}
             colorScheme="cyan"
             size="sm"
           >
             Update Skills
-          </Button>
+          </button>
         </div>
       </div>
       <div>
@@ -134,14 +133,14 @@ const Dashboard = () => {
           </table>
         )}
 
-        <Button
+        <button
           onClick={() => router.push("/dashboard/project/new")}
           leftIcon={<AddIcon />}
           colorScheme="twitter"
           size="sm"
         >
           New Project
-        </Button>
+        </button>
       </div>
       <div>
         <h1 className="font-semibold text-lg">Contacts</h1>
@@ -192,14 +191,14 @@ const Dashboard = () => {
             </tbody>
           </table>
         )}
-        <Button
+        <button
           onClick={() => router.push("/dashboard/contacts/new")}
           leftIcon={<AddIcon />}
           colorScheme="twitter"
           size="sm"
         >
           Add Contacts
-        </Button>
+        </button>
       </div>
       <hr/>
       <div>
@@ -225,7 +224,7 @@ const Dashboard = () => {
             </div>
           </div>
           <div>
-            <Button
+            <button
               size="sm"
               variant="outline"
               colorScheme="twitter"
@@ -233,7 +232,7 @@ const Dashboard = () => {
               type="submit"
             >
               submit
-            </Button>
+            </button>
           </div>
         </form>
       </div>

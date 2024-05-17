@@ -1,6 +1,5 @@
 "use client";
 
-import { Button } from "@chakra-ui/react";
 import { useAddProjectMutation } from "@redux/api";
 import { useState } from "react";
 import toast from "react-hot-toast";
@@ -187,15 +186,15 @@ const NewProject = () => {
             </div>
           </div>
           <div className="flex gap-4">
-            <Button
+            <button
               type="submit"
               isLoading={isLoading}
               loadingText="Loading"
               colorScheme="twitter"
             >
               Submit
-            </Button>
-            <Button
+            </button>
+            <button
               onClick={() =>
                 setFormData({
                   title: "",
@@ -210,7 +209,7 @@ const NewProject = () => {
               colorScheme="red"
             >
               Reset
-            </Button>
+            </button>
           </div>
         </form>
       </div>

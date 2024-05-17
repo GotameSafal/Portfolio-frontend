@@ -1,8 +1,7 @@
 "use client";
-import React, { useState } from "react";
-import { Button } from "@chakra-ui/react";
-import {toast} from 'react-hot-toast';
 import { useAddContactsMutation } from "@redux/api";
+import { useState } from "react";
+import { toast } from "react-hot-toast";
 const Contact = () => {
   const [formData, setFormData] = useState({
     through: "",
@@ -32,7 +31,7 @@ const Contact = () => {
       .unwrap()
       .then((response) => toast.success(response.message))
       .catch((error) => console.error(error));
-    setFormData({ through: "", description: "", link:'' });
+    setFormData({ through: "", description: "", link: "" });
   };
   return (
     <div className="flex min-h-[calc(100vh-230px)] items-center justify-center p-12">
@@ -116,14 +115,14 @@ const Contact = () => {
                 required
               />
             </div>
-            <Button
+            <button
               isLoading={isLoading}
               loadingText="Loading"
               type="submit"
               colorScheme="twitter"
             >
               Submit
-            </Button>
+            </button>
           </div>
         </form>
       </div>

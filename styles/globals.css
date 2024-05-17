@@ -105,3 +105,130 @@
   background: #65c4fa;
   filter: blur(150px);
 }
+
+.text-animation {
+  font-weight: 600;
+  min-width: 200px;
+}
+.text-animation span {
+  position: relative;
+}
+.text-animation span::before {
+  content: "Web Developer.";
+  color: pink;
+  animation: words 20s infinite;
+}
+.text-animation span::after {
+  content: "";
+  background-color: white;
+  position: absolute;
+  width: calc(100% + 8px);
+  height: 100%;
+  border-left: 3px solid red;
+  right: -9px;
+  animation: cursor 0.6s infinite, typing 20s steps(14) infinite;
+}
+@keyframes cursor {
+  to {
+    border-left: 2px solid pink; /* corrected typo */
+  }
+}
+@keyframes words {
+  0%,
+  20% {
+    content: "Web Developer.";
+  }
+  21%,
+  40% {
+    content: "Front End Developer.";
+  }
+  41%,
+  60% {
+    content: "Full Stack Developer.";
+  }
+  61%,
+  80% {
+    content: "Back End Developer.";
+  }
+  81%,
+  100% {
+    content: "Student.";
+  }
+}
+@keyframes typing {
+  10%,
+  15%,
+  30%,
+  35%,
+  50%,
+  55%,
+  70%,
+  75%,
+  90%,
+  95% {
+    width: 0;
+  }
+  5%,
+  20%,
+  25%,
+  40%,
+  45%,
+  60%,
+  65%,
+  80%,
+  85% {
+    width: calc(100% + 8px); /* corrected calc() usage */
+  }
+}
+
+.profile {
+  animation: animate 30s alternate infinite;
+}
+
+@keyframes animate {
+  0% {
+    border-radius: 50% 50% 43% 57% / 47% 47% 53% 53%;
+  }
+  10% {
+    border-radius: 36% 64% 36% 64% / 47% 43% 57% 53%;
+  }
+  20% {
+    border-radius: 26% 74% 30% 70% / 55% 47% 53% 45%;
+  }
+  30% {
+    border-radius: 47% 53% 49% 51% / 68% 36% 64% 32%;
+  }
+  40% {
+    border-radius: 30% 70% 31% 69% / 68% 36% 64% 32%;
+  }
+  50% {
+    border-radius: 17% 83% 23% 77% / 68% 39% 61% 32%;
+  }
+  60% {
+    border-radius: 66% 34% 23% 77% / 68% 39% 61% 32%;
+  }
+  70% {
+    border-radius: 66% 34% 39% 61% / 68% 39% 61% 32%;
+  }
+  80% {
+    border-radius: 65% 35% 24% 76% / 34% 20% 80% 66%;
+  }
+  90% {
+    border-radius: 93% 7% 24% 76% / 59% 57% 43% 41%;
+  }
+
+  100% {
+    border-radius: 63% 37% 18% 82% / 53% 77% 23% 47%;
+  }
+}
+
+/* HTML: <div class="loader"></div> */
+.loader {
+  background:
+   linear-gradient(#000 0 0) 0/0% no-repeat
+   #ddd;
+  animation: l1 2s   linear;
+}
+@keyframes l1 {
+    100% {background-size:100%}
+}

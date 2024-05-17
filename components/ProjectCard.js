@@ -1,7 +1,4 @@
 "use client";
-import { Heading, Button, Text } from "@chakra-ui/react";
-import { BiLinkExternal } from "react-icons/bi";
-import { BsCodeSlash } from "react-icons/bs";
 import Image from "next/image";
 const ProjectCard = ({ data }) => {
   return (
@@ -13,15 +10,15 @@ const ProjectCard = ({ data }) => {
         alt="default"
       />
       <div className="flex flex-col px-2 ">
-        <Heading as="h3" size="md" className="py-2 ">
+        <h3 as="h3" size="md" className="py-2 ">
           {data.title}
-        </Heading>
-        <Heading as="h4" size="sm" className=" text-gray-700">
+        </h3>
+        <h3 as="h4" size="sm" className=" p-gray-700">
           {data?.subTitle}
-        </Heading>
-        <Text className="text-justify py-2">{data?.description}</Text>
+        </h3>
+        <p className="p-justify py-2">{data?.description}</p>
         <div className="flex flex-wrap my-2">
-          <Text className="text-md font-semibold me-2">Technologies :</Text>
+          <p className="p-md font-semibold me-2">Technologies :</p>
           <ul className="flex gap-3 flex-wrap">
             {data?.technologies.map((item, index) => (
               <li
@@ -35,24 +32,22 @@ const ProjectCard = ({ data }) => {
         </div>
         <div className="flex my-3 gap-3">
           <a href={data?.goLive} target="_blank">
-            <Button
+            <button
               rounded="sm"
-              leftIcon={<BiLinkExternal />}
               size="sm"
               colorScheme="gray"
             >
               Go Live
-            </Button>
+            </button>
           </a>
           <a href={data?.sourceCode} target="_blank">
-            <Button
+            <button
               rounded="sm"
-              leftIcon={<BsCodeSlash />}
               size="sm"
               colorScheme="blue"
             >
               Source code
-            </Button>
+            </button>
           </a>
         </div>
       </div>
