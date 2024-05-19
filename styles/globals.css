@@ -222,13 +222,85 @@
   }
 }
 
-/* HTML: <div class="loader"></div> */
-.loader {
-  background:
-   linear-gradient(#000 0 0) 0/0% no-repeat
-   #ddd;
-  animation: l1 2s   linear;
+.projects {
+  max-width: 1200px;
+  height: auto;
+  position: relative;
+  margin: auto;
+  padding-bottom: 16px;
+  margin-bottom: 16px;
 }
-@keyframes l1 {
-    100% {background-size:100%}
+.projects::before {
+  content: "";
+  position: absolute;
+  width: 10px;
+  height: 100%;
+  background-color: #043697;
+  left: calc(50% - 1px);
+  top: 0;
+}
+.project_containers {
+  display: flex;
+  flex-wrap: wrap;
+}
+.project_container {
+  margin: 8px;
+}
+.project_container:nth-child(odd) {
+  padding-right: calc(50% + 30px);
+  text-align: right;
+}
+.project_container:nth-child(even) {
+  padding-left: calc(50% + 30px);
+}
+.project_dot {
+  width: 30px;
+  height: 30px;
+  border-radius: 100%;
+  position: absolute;
+  background-color: #043697;
+  left: calc(50% - 11px);
+}
+.project_heading {
+  font-size: 18px;
+  font-weight: 700;
+  margin-bottom: 8px;
+}
+.box {
+  text-align: justify;
+  width: 100%;
+  padding: 16px;
+  border: 1px solid #043697;
+  border-radius: 20px;
+}
+
+.image {
+  width: 100%;
+  height: 200px;
+  background-color: red;
+}
+.project_container:nth-child(odd) {
+  padding-right: calc(50% + 30px);
+  text-align: right;
+}
+@media (max-width: 1000px) {
+  .projects::before {
+    left: 7px;
+  }
+  .project_container {
+    margin-left: 23px;
+    margin-right: 8px;
+  }
+  .project_container:nth-child(odd) {
+    padding-right: 0;
+    text-align: left;
+  }
+  .project_container:nth-child(odd),
+  .project_container:nth-child(even) {
+    padding-left: 5px;
+    margin-bottom: 16px;
+  }
+  .project_dot {
+    left: -27px;
+  }
 }

@@ -1,20 +1,41 @@
 import { technical } from "@utils/skillsList";
 import { Bar, Circle } from "./progress";
+import { MotionDiv, MotionH1, MotionH2 } from "./MotionDiv";
+import { slideIn } from "@utils/motion";
 const SkillSet = () => {
   return (
-    <section className="max-w-screen-xl m-auto w-full">
-      <h1 className="font-bold text-center text-3xl mb-6">
+    <section className="max-w-screen-xl m-auto w-full mb-3">
+      <MotionH1
+        variants={slideIn("left", "spring", 0.5, 1)}
+        initial="hidden"
+        whileInView="show"
+        viewport={{ once: true }}
+        className="font-bold text-center text-3xl mb-6"
+      >
         My <span className="text-[#0ef]">Skills</span>
-      </h1>
+      </MotionH1>
       <div className="lg:flex-row flex flex-col  w-full">
         <div className="px-4 lg:px-0 lg:min-w-[640px] w-full">
-          <h2 className="text-xl underline underline-offset-8 decoration-8 decoration-gray-800 max-w-[640px] text-center font-semibold mb-4">
+          <MotionH2
+            variants={slideIn("down", "spring", 0.6, 0.9)}
+            initial="hidden"
+            whileInView="show"
+            viewport={{ once: true }}
+            className="text-xl underline underline-offset-8 decoration-8 decoration-gray-800 max-w-[640px] text-center font-semibold mb-4"
+          >
             Technical Skills
-          </h2>
+          </MotionH2>
           <div className="details">
-            {technical.map((item) => {
+            {technical.map((item, ind) => {
               return (
-                <div className="mb-4" key={item.tagname}>
+                <MotionDiv
+                  variants={slideIn("left", "spring", 0.2 * (ind + 1), 0.4)}
+                  initial="hidden"
+                  whileInView="show"
+                  viewport={{ once: true }}
+                  className="mb-4"
+                  key={item.tagname}
+                >
                   <div className="mb-1">{item.icon}</div>
                   <div className="semi-bold lg:text-lg text-md">
                     {item.tagname}
@@ -23,20 +44,32 @@ const SkillSet = () => {
                     completed={item.progress.completed}
                     label={item.progress.label}
                   />
-                </div>
+                </MotionDiv>
               );
             })}
           </div>
         </div>
         <div className="lg:min-w-[640px] w-full">
-          <h2 className="text-xl text-center underline underline-offset-8 decoration-8 mb-4 decoration-gray-800 font-semibold">
+          <MotionH2
+            variants={slideIn("down", "spring", 0.6, 0.9)}
+            initial="hidden"
+            whileInView="show"
+            viewport={{ once: true }}
+            className="text-xl text-center underline underline-offset-8 decoration-8 mb-4 decoration-gray-800 font-semibold"
+          >
             Professional Skills
-          </h2>
-          <div className="grid sm:grid-cols-2 grid-cols-1 sm:grid-rows-1 grid-rows-2 gap-3">
+          </MotionH2>
+          <MotionDiv
+            variants={slideIn("right", "spring", 0.7, 0.9)}
+            initial="hidden"
+            whileInView="show"
+            viewport={{ once: true }}
+            className="grid sm:grid-cols-2 grid-cols-1 sm:grid-rows-1 grid-rows-2 gap-3"
+          >
             <Circle progress={80} sub="Communciation" />
 
             <Circle progress={75} sub="Problem Solving" />
-          </div>
+          </MotionDiv>
         </div>
       </div>
     </section>

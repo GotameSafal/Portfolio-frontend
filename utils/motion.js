@@ -159,3 +159,16 @@ export const footerVariants = {
     },
   },
 };
+export const buttonVariants = {
+  hidden: {
+    y: "100vh",
+    opacity: 0,
+  },
+  show: {
+    y: 0,
+    opacity: 1,
+    transition: "spring",
+    delay: 0.4,
+    stiffness: 150,
+  },
+};

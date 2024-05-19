@@ -1,8 +1,5 @@
 export const navlist = [
-  {
-    name: "About me",
-    url: "#about",
-  },
+
   {
     name: "Skills",
     url: "#skills",
