@@ -3,7 +3,10 @@ import { BiCodeAlt, BiLinkExternal } from "@utils/iconExp";
 import Image from "next/image";
 import { MotionA, MotionDiv, MotionH1, MotionSpan } from "./MotionDiv";
 import { slideIn, fadeIn } from "@utils/motion";
-const Projects = () => {
+import { fetchprojects } from "./Apis";
+
+const Projects = async () => {
+  const data = await fetchprojects();
   return (
     <section className="mb-3">
       <MotionH1
@@ -17,7 +20,7 @@ const Projects = () => {
       </MotionH1>
       <div className="projects">
         <div className="projct_containers">
-          {projectObj.map((item, ind) => (
+          {data?.projects?.map((item, ind) => (
             <MotionDiv
               variants={slideIn(
                 ind % 2 == 0 ? "left" : "right",

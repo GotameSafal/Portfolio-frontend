@@ -33,15 +33,14 @@ const HeroSection = () => {
             variants={textVariant(0.5)}
             initial="hidden"
             animate="show"
-            className="lg:text-justify text-center"
+            className="text-justify sm:text-base text-sm my-1"
           >
             Deserunt aliqua tempor elit enim occaecat laborum cillum sint
             consectetur. Laboris do voluptate do minim in irure incididunt enim
             dolor ipsum laborum non cillum dolore. Ullamco et minim sint
             incididunt Lorem do dolore deserunt.
           </MotionP>
-          <div className="my-4">icons</div>
-          <div className="flex lg:justify-start justify-center gap-3">
+          <div className="flex lg:justify-start mt-2 justify-center gap-3">
             <MotionButton
               variants={buttonVariants}
               initial="hidden"

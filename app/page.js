@@ -1,4 +1,5 @@
 import Contacts from "@components/Contacts";
+import DownloadResume from "@components/DownloadResume";
 import Footer from "@components/Footer";
 import HeroSection from "@components/HeroSection";
 import Projects from "@components/Projects";
@@ -12,6 +13,7 @@ export default function Pages({ children }) {
       <Projects/>
       <Contacts/>
       <Footer/>
+      <DownloadResume/>
     </main>
   );
 }

@@ -8,25 +8,17 @@ import Link from "next/link";
 const Navbar = () => {
   return (
     <section className="dark-mode:text-gray-200 dark-mode:bg-gray-800 w-full bg-white text-gray-700">
-      <div className="mx-auto flex max-w-screen-xl border-b flex-col px-4 md:flex-row md:items-center md:justify-between md:px-6 lg:px-8">
-        <div className="flex flex-row items-center justify-between px-4 py-2">
+      <div className="mx-auto mb-2 flex max-w-screen-xl border-b px-4 items-center justify-between md:px-6 lg:px-8">
+        <div className="flex flex-row items-center px-4 py-2">
           <Link href="/">
-            <Image
-              width={35}
-              height={35}
+            <img
               src="/sdev.png"
               alt="logo"
-              className="rounded-full"
+              className="rounded-full lg:w-9 lg:h-9 w-7 h-7"
             />
           </Link>
-          <button className="rounded-full p-2 bg-orange-500 text-white md:hidden focus:outline-none focus:shadow-outline">
-            <RxCross2 />
-          </button>
-          <button className="rounded-full p-2 bg-orange-500 text-white md:hidden focus:outline-none focus:shadow-outline">
-            <RiMenuFoldLine />
-          </button>
         </div>
-        <nav className="hiddmotion.en flex-grow flex-col pb-4 md:flex md:flex-row items-center md:justify-end md:pb-0 text-xl">
+        <nav className="flex-grow pb-4 flex  items-center justify-end md:pb-0 md:text-xl sm:text-base text-sm">
           {navlist.map((item) => {
             return (
               <motion.a
