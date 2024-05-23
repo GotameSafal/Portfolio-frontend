@@ -49,7 +49,7 @@ const Projects = async () => {
                 className="box"
               >
                 <Image
-                  src={item.imgUrl}
+                  src={item.imgUrl.url}
                   alt={item.name}
                   width="100%"
                   height="100%"
