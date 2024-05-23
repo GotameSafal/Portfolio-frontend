@@ -35,10 +35,10 @@ const HeroSection = () => {
             animate="show"
             className="text-justify sm:text-base text-sm my-1"
           >
-            Deserunt aliqua tempor elit enim occaecat laborum cillum sint
-            consectetur. Laboris do voluptate do minim in irure incididunt enim
-            dolor ipsum laborum non cillum dolore. Ullamco et minim sint
-            incididunt Lorem do dolore deserunt.
+            Energetic BCA student passionate about crafting dynamic web apps.
+            Skilled in HTML, CSS, JavaScript, with expertise in React, Next.js,
+            and Node.js. Dedicated to driving innovation in web development
+            projects.
           </MotionP>
           <div className="flex lg:justify-start mt-2 justify-center gap-3">
             <MotionButton

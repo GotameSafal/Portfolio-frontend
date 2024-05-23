@@ -15,6 +15,7 @@ const Projects = async () => {
         whileInView="show"
         viewport={{ once: true }}
         className="font-bold text-center text-3xl mb-6"
+        id="projects"
       >
         Projects
       </MotionH1>
@@ -57,7 +58,7 @@ const Projects = async () => {
                 />
                 <h4 className="font-bold sm:text-lg text-base">Description</h4>
                 <p className="text-sm leading-tight">{item.description}</p>
-                <h4 className="font-bold mt-2">Technologies</h4>
+                <h4 className="font-bold mt-2">Technologies used</h4>
                 <div className="flex flex-wrap gap-3">
                   {item.technologies.map((tag) => (
                     <MotionSpan

@@ -11,13 +11,14 @@ const SkillSet = () => {
         whileInView="show"
         viewport={{ once: true }}
         className="font-bold text-center text-3xl mb-6"
+        id="skills"
       >
         My <span className="text-[#0ef]">Skills</span>
       </MotionH1>
       <div className="lg:flex-row flex flex-col  w-full">
         <div className="px-4 lg:px-0 lg:min-w-[640px] w-full">
           <MotionH2
-            variants={slideIn("down", "spring", 0.6, 0.9)}
+            variants={slideIn("down", "spring", 0, 0.9)}
             initial="hidden"
             whileInView="show"
             viewport={{ once: true }}
@@ -29,7 +30,7 @@ const SkillSet = () => {
             {technical.map((item, ind) => {
               return (
                 <MotionDiv
-                  variants={slideIn("left", "spring", 0.2 * (ind + 1), 0.4)}
+                  variants={slideIn("left", "spring", 0.1 * (ind + 1), 0.3)}
                   initial="hidden"
                   whileInView="show"
                   viewport={{ once: true }}
@@ -51,7 +52,7 @@ const SkillSet = () => {
         </div>
         <div className="lg:min-w-[640px] w-full">
           <MotionH2
-            variants={slideIn("down", "spring", 0.6, 0.9)}
+            variants={slideIn("down", "spring", 0, 0.9)}
             initial="hidden"
             whileInView="show"
             viewport={{ once: true }}
@@ -60,7 +61,7 @@ const SkillSet = () => {
             Professional Skills
           </MotionH2>
           <MotionDiv
-            variants={slideIn("right", "spring", 0.7, 0.9)}
+            variants={slideIn("right", "spring", 0, 0.9)}
             initial="hidden"
             whileInView="show"
             viewport={{ once: true }}

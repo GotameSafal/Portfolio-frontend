@@ -5,6 +5,7 @@ import * as yup from "yup";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useEffect } from "react";
+import { sendmail } from "./Apis";
 const schema = yup.object().shape({
   fullname: yup
     .string()
@@ -28,12 +29,14 @@ const Form = () => {
     register,
     handleSubmit,
     reset,
-    formState: { errors, isSubmitSuccessful },
+    formState: { errors, isSubmitSuccessful, isSubmitting },
   } = useForm({
     resolver: yupResolver(schema),
   });
-  const submitform = (data) => {
-    console.log(data);
+  const submitform = async (data) => {
+    const res = await sendmail(data);
+    if (res.success) alert(res.message);
+    else alert("something went wrong");
   };
   useEffect(() => {
     if (isSubmitSuccessful) {
@@ -54,7 +57,7 @@ const Form = () => {
             className="rounded border-0 bg-gray-800 p-3 leading-none text-gray-50 focus:border-blue-700"
             {...register("fullname")}
           />
-          <p class="text-xs text-red-500 font-bold">
+          <p className="text-xs text-red-500 font-bold">
             {errors?.fullname?.message}
           </p>
         </div>
@@ -69,7 +72,9 @@ const Form = () => {
             className="rounded border-0 bg-gray-800 p-3 leading-none text-gray-50 focus:border-blue-700"
             {...register("email")}
           />
-          <p class="text-xs text-red-500 font-bold">{errors?.email?.message}</p>
+          <p className="text-xs text-red-500 font-bold">
+            {errors?.email?.message}
+          </p>
         </div>
       </div>
       <div className="">
@@ -83,7 +88,9 @@ const Form = () => {
           className="w-full rounded border-0 bg-gray-800 p-3 leading-none text-gray-50 focus:border-blue-700"
           {...register("phone")}
         />
-        <p class="text-xs text-red-500 font-bold">{errors?.phone?.message}</p>
+        <p className="text-xs text-red-500 font-bold">
+          {errors?.phone?.message}
+        </p>
       </div>
       <div>
         <MotionTextarea
@@ -96,12 +103,15 @@ const Form = () => {
           className="h-36 w-full rounded border-0 bg-gray-800 p-3 text-base leading-none text-gray-50 focus:border-blue-700 sm:h-40"
           {...register("message")}
         ></MotionTextarea>
-        <p class="text-xs text-red-500 font-bold">{errors?.message?.message}</p>
+        <p className="text-xs text-red-500 font-bold">
+          {errors?.message?.message}
+        </p>
       </div>
       <div className="flex w-full items-center justify-center">
         <MotionButton
           variants={slideIn("up", "spring", 0, 0.8)}
           initial="hidden"
+          disabled={isSubmitting}
           whileInView="show"
           viewport={{ once: true }}
           className="mt-6 w-full rounded bg-blue-700 px-10 py-4 font-bold leading-none text-white hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-700 focus:ring-offset-2 sm:mt-9"

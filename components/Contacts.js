@@ -23,9 +23,9 @@ const Contacts = () => {
     <section>
       <div className="mx-auto mb-12 max-w-screen-xl px-1 sm:px-6 lg:px-8">
         <div className="m flex w-full flex-col gap-6 rounded bg-gray-900 p-4 shadow sm:p-12">
-          <p className="text-center text-3xl font-bold leading-7 text-white">
+          <h2 id="contacts" className="text-center text-3xl font-bold leading-7 text-white">
             Contact <span className="text-[#0ef]">Me</span>
-          </p>
+          </h2>
           <Form />
         </div>
       </div>

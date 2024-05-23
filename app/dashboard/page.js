@@ -3,9 +3,9 @@ import { DeleteButton, EditButton, NewProject } from "@components/Clients";
 
 const page = async () => {
   const data = await fetchprojects();
-  
+
   return (
-    <section className='mb-6'>
+    <section className="mb-6">
       <div className="max-w-screen-xl mx-auto">
         <div className="p-6 overflow-scroll px-0">
           <h2 className="font-semibold text-lg my-2">Projects</h2>
@@ -48,15 +48,15 @@ const page = async () => {
                     </p>
                   </td>
                   <td className="p-4 border-b border-blue-gray-50">
-                    <EditButton id={item._id}/>
-                    <DeleteButton  id={item._id} />
+                    <EditButton id={item._id} />
+                    <DeleteButton id={item._id} />
                   </td>
                 </tr>
               ))}
             </tbody>
           </table>
         </div>
-        <NewProject/>
+        <NewProject />
       </div>
     </section>
   );

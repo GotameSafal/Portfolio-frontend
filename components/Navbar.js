@@ -1,5 +1,4 @@
 "use client";
-import { RiMenuFoldLine, RxCross2 } from "@utils/iconExp";
 import { navVariants } from "@utils/motion";
 import { navlist } from "@utils/navList";
 import { motion } from "framer-motion";
@@ -11,10 +10,11 @@ const Navbar = () => {
       <div className="mx-auto mb-2 flex max-w-screen-xl border-b px-4 items-center justify-between md:px-6 lg:px-8">
         <div className="flex flex-row items-center px-4 py-2">
           <Link href="/">
-            <img
+            <Image
               src="/sdev.png"
               alt="logo"
-              className="rounded-full lg:w-9 lg:h-9 w-7 h-7"
+              width={28}
+              height={28}
             />
           </Link>
         </div>
@@ -29,7 +29,7 @@ const Navbar = () => {
                 className="dark-mode:bg-transparent dark-mode:hover:bg-gray-600 dark-mode:focus:bg-gray-600 dark-mode:focus:text-white dark-mode:hover:text-white dark-mode:text-gray-200 focus:shadow-outline mt-2 rounded-lg bg-transparent px-4 py-2 text-base font-semibold focus:bg-gray-200 focus:text-gray-900 focus:outline-none md:ml-4 md:mt-0"
                 href={item.url}
               >
-                <motion.p whileHover={{ y: -10 }}>{item.name}</motion.p>
+                <motion.p whileHover={{ y: -10, textShadow:"4px 2px 8px rgba(0,0,0,0.39)" }}>{item.name}</motion.p>
               </motion.a>
             );
           })}
