@@ -1,34 +1,41 @@
 "use client";
-import { login } from "@components/Apis";
+import { useDispatch } from "react-redux";
+import { useDoLoginMutation } from "@redux/slices/api";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 import { useForm } from "react-hook-form";
-
+import { toast } from "react-toastify";
+import { setToken } from "@redux/slices/configUser";
+import { Button } from "@components/ui/button";
 const Page = () => {
   const router = useRouter();
-  const {
-    register,
-    handleSubmit,
-    reset,
-    formState: { isSubmitSuccessful },
-  } = useForm();
-  useEffect(() => {
-    if (isSubmitSuccessful) {
-      reset();
-    }
-  }, [isSubmitSuccessful, reset]);
+  const dispatch = useDispatch();
+  const [doLogin, { isSuccess, isLoading }] = useDoLoginMutation();
+  const { register, handleSubmit, reset, formState } = useForm();
 
-  const onSubmit = async (data) => {
-    const res = await login(data);
-    if (res.success) router.push("/dashboard");
-    else alert("invalid credentails");
+  useEffect(() => {
+    if (isSuccess) reset();
+  }, [isSuccess]);
+
+  const submitHandler = async (formdata) => {
+    try {
+      const res = await doLogin(formdata).unwrap();
+      console.log("res", res);
+      if (res.success) {
+        dispatch(setToken(res?.token));
+        toast.success(res.message);
+        router.push("/admin");
+      }
+    } catch (err) {
+      toast.error(err?.data?.message);
+    }
   };
 
   return (
-    <div className="flex min-h-screen items-center justify-start bg-white">
-      <div className="mx-auto w-full max-w-lg">
+    <div className="flex items-center justify-start min-h-screen bg-white">
+      <div className="w-full max-w-lg mx-auto">
         <h1 className="text-2xl font-bold">Login</h1>
-        <form onSubmit={handleSubmit(onSubmit)} className="mt-10">
+        <form onSubmit={handleSubmit(submitHandler)} className="mt-10">
           <div className="grid gap-6 sm:grid-cols-2">
             <div className="relative z-0 col-span-2">
               <input
@@ -55,12 +62,14 @@ const Page = () => {
               </label>
             </div>
           </div>
-          <button
+          <Button
             type="submit"
-            className="mt-5 w-full rounded-md bg-black px-10 py-2 text-white font-bold"
+            isLoading={isLoading}
+            loadingText="Submitting..."
+            className="w-full"
           >
             Login
-          </button>
+          </Button>
         </form>
       </div>
     </div>

@@ -1,21 +1,50 @@
-import { slideIn } from "@utils/motion";
-import { MotionDiv } from "./MotionDiv";
-import { PiDownloadSimpleLight } from "react-icons/pi";
+'use client'
+import React, { useState } from "react";
+import { Button } from "@components/ui/button"; // Custom Button component (optional)
+import { Label } from "./ui/label";
 
-const DownloadResume = () => {
+const CustomFileUpload = ({ onFileSelect }) => {
+  const [fileName, setFileName] = useState("");
+
+  // Handle file selection
+  const handleFileChange = (event) => {
+    const file = event.target.files[0];
+    if (file) {
+      setFileName(file.name); // Set file name for UI feedback
+      onFileSelect(file); // Pass the file back to parent
+    }
+  };
+
   return (
-    <MotionDiv
-      variants={slideIn("up", "spring", 0, 0.5)}
-      initial="hidden"
-      animate="show"
-      whileHover={{ scale: 1.1, y: -4, backgroundColor: "tomato" }}
-      className="w-12 h-12 rounded-full flex justify-center items-center bg-red-500 fixed bottom-3 right-3"
-    >
-      <a href="/resume.pdf" download="resume.pdf">
-        <PiDownloadSimpleLight size={25} color="white" />
-      </a>
-    </MotionDiv>
+    <div className="flex flex-col space-y-2">
+      {/* Custom styled button */}
+      <Label htmlFor="fileUpload" className="cursor-pointer">
+        <Button
+          type="button"
+          className="text-white transition-all bg-blue-500 hover:bg-blue-600"
+        >
+          {fileName ? "Change File" : "Upload File"}
+        </Button>
+      </Label>
+
+      {/* Hidden input element */}
+      <input
+        id="fileUpload"
+        type="file"
+        accept="image/*"
+        onChange={handleFileChange}
+        style={{ display: "none" }} // Hides the file input
+      />
+
+      {/* File name display */}
+      {fileName && (
+        <p className="text-sm text-gray-600">
+          Selected file: <strong>{fileName}</strong>
+        </p>
+      )}
+      <button type=""></button>
+    </div>
   );
 };
 
-export default DownloadResume;
+export default CustomFileUpload;

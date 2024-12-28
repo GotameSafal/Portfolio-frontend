@@ -2,10 +2,11 @@ import Image from "next/image";
 import { ContactIcons } from "./Contacts";
 import { MotionA, MotionDiv, MotionLi, MotionSpan } from "./MotionDiv";
 import { slideIn } from "@utils/motion";
+import logo from "@app/favicon.ico";
 const Footer = () => {
   return (
-    <footer className="p-4 bg-white rounded-t-lg shadow md:px-6 md:py-8 dark:bg-gray-800">
-      <div className="flex sm:flex-row flex-col items-center sm:justify-between max-w-screen-xl m-auto">
+    <footer className="p-4 bg-gray-900 border-t-2 shadow bg md:px-6 md:py-4">
+      <div className="flex flex-col items-center max-w-screen-xl m-auto sm:flex-row sm:justify-between">
         <MotionA
           variants={slideIn("left", "spring", 0, 0.8)}
           initial="hidden"
@@ -16,17 +17,17 @@ const Footer = () => {
           className="flex items-center mb-4 sm:mb-0"
         >
           <Image
-            src="/sdev.png"
+            src={logo}
             width={32}
             height={32}
-            className="mr-4 h-8 rounded-full"
+            className="h-8 mr-4 rounded- full"
             alt="sdev logo"
           />
-          <span className="self-center text-xl font-semibold whitespace-nowrap dark:text-white">
+          <span className="self-center text-xl font-semibold text-white whitespace-nowrap">
             S-<span className="text-[#0ef]">Dev</span>
           </span>
         </MotionA>
-        <ul className="flex flex-wrap items-center mb-6 sm:mb-0 gap-5">
+        <ul className="flex flex-wrap items-center gap-5 mb-6 sm:mb-0">
           {ContactIcons.map((obj, ind) => (
             <MotionLi
               variants={slideIn("right", "spring", 0.2 * ind, 0.4)}
@@ -36,9 +37,8 @@ const Footer = () => {
               whileHover={{
                 scale: 1.2,
                 y: -8,
-                boxShadow: "1px 2px 35px 32px white",
               }}
-              className={` transition-transform  rounded-full ${obj.clss}`}
+              className={` transition-transform scale-50 rounded-full ${obj.clss}`}
               key={ind}
             >
               <a
@@ -52,15 +52,15 @@ const Footer = () => {
           ))}
         </ul>
       </div>
-      <hr className="sm:my-6  border-gray-200 sm:mx-auto dark:border-gray-700 font-bold" />
+      <hr className="font-bold border-gray-200 sm:my-6 sm:mx-auto dark:border-gray-700" />
       <MotionSpan
         variants={slideIn("up", "spring", 0, 0.9)}
         initial="hidden"
         whileInView="show"
         viewport={{ once: true }}
-        className="block text-sm text-center text-gray-500 sm:text-center dark:text-gray-400 sm:pt-0 pt-3"
+        className="block pt-3 text-sm text-center text-gray-500 sm:text-center dark:text-gray-400 sm:pt-0"
       >
-        © 2024{" "}
+        © {}
         <a
           href="https://sdev-portfolio.vercel.app"
           target="_blank"
