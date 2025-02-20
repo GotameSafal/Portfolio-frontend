@@ -83,12 +83,15 @@ const SkillCard = () => {
 
       <CardContent>
         <div className="w-full p-2">
-          {data?.skills?.map((skill) => (
-            <div className="">
+          {data?.skills?.map((skill, index) => (
+            <div className="" key={index}>
               <h2 className="text-2xl font-semibold ">{skill?.skills}</h2>
               <ul className="px-4 py-1 space-y-1">
-                {skill?.options?.map((item) => (
-                  <Card className="w-full transition-all duration-300 border-2 border-transparent hover:shadow-lg hover:border-green-200">
+                {skill?.options?.map((item, indices) => (
+                  <Card
+                    key={indices}
+                    className="w-full transition-all duration-300 border-2 border-transparent hover:shadow-lg hover:border-green-200"
+                  >
                     <CardHeader className="flex flex-row items-center space-x-4">
                       <div className="flex items-center justify-between w-full">
                         <div>

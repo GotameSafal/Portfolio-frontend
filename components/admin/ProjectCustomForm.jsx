@@ -24,6 +24,7 @@ import {
 } from "@redux/slices/api";
 import { get } from "lodash";
 import { toast } from "react-toastify";
+import Image from "next/image";
 const ProjectCustomForm = memo(({ title, project }) => {
   const [addProject, { isLoading, isSuccess }] = useAddProjectMutation();
   const [updateProject, { isLoading: isupdating, isSuccess: onSuccess }] =
@@ -36,13 +37,13 @@ const ProjectCustomForm = memo(({ title, project }) => {
     }
     if (title !== "Add" && project?.imgUrl?.url)
       setSelectedImage(project?.imgUrl?.url);
-  }, [isSuccess]);
+  }, [isSuccess, reset, project.imgUrl.url, title]);
+
   const {
     handleSubmit,
     reset,
     register,
     control,
-
     watch,
     setValue,
     formState: { errors },
@@ -103,6 +104,7 @@ const ProjectCustomForm = memo(({ title, project }) => {
         {projectFormObject?.map(
           ({ label, placeholder, name, type, lg, multiline }) => (
             <FormInput
+              key={name}
               label={label}
               placeholder={placeholder}
               type={type}
@@ -166,7 +168,7 @@ const ProjectCustomForm = memo(({ title, project }) => {
           />
           {selectedImage && (
             <div className="w-full" style={{ marginTop: "8px" }}>
-              <img
+              <Image
                 src={
                   selectedImage ||
                   (typeof formik.values.thumbnail === "string"
@@ -197,5 +199,5 @@ const ProjectCustomForm = memo(({ title, project }) => {
     </form>
   );
 });
-
+ProjectCustomForm.displayName = "ProjectCustomForm";
 export default ProjectCustomForm;

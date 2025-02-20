@@ -18,7 +18,7 @@ import {
   LogOut,
   Menu,
   Newspaper,
-  X
+  X,
 } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
@@ -53,7 +53,7 @@ const Navbar = ({ session }) => {
       }
     };
     userSession();
-  }, [session, token]);
+  }, [session, token, dispatch, getLoggedInUserDetails, user]);
 
   if (pathname.startsWith("/admin")) return <></>;
   const toggleMenu = () => {
@@ -256,7 +256,7 @@ const Navbar = ({ session }) => {
                       variant="outline"
                       className="w-full text-white bg-gray-700 hover:bg-gray-600"
                     >
-                      <img
+                      <Image
                         src={user.avatar || "/default-avatar.png"}
                         alt="User avatar"
                         className="w-6 h-6 mr-2 rounded-full"

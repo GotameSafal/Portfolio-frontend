@@ -22,7 +22,7 @@ import { resetConfigUser } from "@redux/slices/configUser";
 import { getLogout } from "@components/Apis";
 import { useDispatch } from "@node_modules/react-redux/dist/react-redux";
 
-const layout = ({ children }) => {
+const Layout = ({ children }) => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const pathname = usePathname();
   const router = useRouter();
@@ -180,4 +180,4 @@ const dispatch = useDispatch()
   );
 };
 
-export default layout;
+export default Layout;

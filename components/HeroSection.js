@@ -1,7 +1,7 @@
 "use client";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import { motion } from "framer-motion";
-
+import Image from "next/image";
 import {
   Code,
   Server,
@@ -11,7 +11,6 @@ import {
   Send,
   Download,
 } from "lucide-react";
-
 const SkillBadge = ({ icon: Icon, label }) => (
   <motion.div
     whileHover={{ scale: 1.05 }}
@@ -22,9 +21,12 @@ const SkillBadge = ({ icon: Icon, label }) => (
   </motion.div>
 );
 
-const page = () => {
+const HeroSection = () => {
   const [currentRole, setCurrentRole] = useState("");
-  const roles = ["Full-Stack Developer", "Web Architect", 'Fronte-End Developer'];
+  const roles = useMemo(
+    () => ["Full-Stack Developer", "Web Architect", "Fronte-End Developer"],
+    []
+  );
   useEffect(() => {
     let index = 0;
     const interval = setInterval(() => {
@@ -33,7 +35,7 @@ const page = () => {
     }, 2000);
 
     return () => clearInterval(interval);
-  }, []);
+  }, [roles]);
   const handleClick = () => {
     const pdfUrl = "/resume.pdf";
     const link = document.createElement("a");
@@ -200,8 +202,10 @@ const page = () => {
         >
           <div className="relative overflow-hidden border-4 rounded-full shadow-2xl w-80 h-80 border-blue-500/50">
             <div className="absolute inset-0 bg-gradient-to-br from-blue-400/30 to-purple-600/30 mix-blend-overlay"></div>
-            <img
-              src="/profile.jpg"
+            <Image
+              src="/my.png"
+              width={300}
+              height={300}
               alt="Profile"
               className="object-cover w-full h-full transition-all duration-300 filter grayscale hover:grayscale-0"
             />
@@ -212,4 +216,4 @@ const page = () => {
   );
 };
 
-export default page;
+export default HeroSection;

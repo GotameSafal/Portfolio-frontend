@@ -40,7 +40,7 @@ const SkillCustomForm = ({ title = "Add", data }) => {
   });
   useEffect(() => {
     if (isSuccess) reset();
-  }, [isSuccess]);
+  }, [isSuccess, reset]);
   const handleSelect = (value) => {
     setValue("skills", value);
   };
@@ -90,6 +90,7 @@ const SkillCustomForm = ({ title = "Add", data }) => {
           </div>
           {formObj?.map(({ label, placeholder, name, type, lg, multiline }) => (
             <FormInput
+              key={name}
               label={label}
               placeholder={placeholder}
               type={type}

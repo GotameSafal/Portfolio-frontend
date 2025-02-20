@@ -181,7 +181,7 @@ const ProjectDetailModal = ({ project, onClose }) => {
   );
 };
 
-const page = () => {
+const Projects = () => {
   const [selectedProject, setSelectedProject] = useState(null);
   const { data } = useGetProjectsQuery();
   // const projects = [
@@ -222,7 +222,7 @@ const page = () => {
   //     image: "/api/placeholder/800/600", // Replace with actual project image
   //   },
   // ];
-console.log(data)
+  console.log(data);
   return (
     <motion.div
       initial={{ opacity: 0 }}
@@ -276,4 +276,4 @@ console.log(data)
     </motion.div>
   );
 };
-export default page;
+export default Projects;
