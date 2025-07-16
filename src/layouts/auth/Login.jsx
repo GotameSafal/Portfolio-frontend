@@ -6,6 +6,7 @@ import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { z } from "zod";
+import { useAuth } from "@/contexts/AuthContext";
 
 // Define schema using Zod
 const loginSchema = z.object({
@@ -23,6 +24,7 @@ const Login = () => {
   const [error, setError] = useState("");
   const { mutateAsync: login } = useLogin();
   const navigate = useNavigate();
+  const { updateUser } = useAuth();
 
   const {
     register,
@@ -40,7 +42,12 @@ const Login = () => {
     setError("");
     try {
       const res = await login(data);
-      if (res.success) navigate("/dashboard", { replace: true });
+      if (res.success) {
+        // Update user state immediately
+        updateUser(res.user);
+        // Navigate to dashboard
+        navigate("/dashboard", { replace: true });
+      }
     } catch (err) {
       toast.error(err?.data?.message || "Error logging in");
     }

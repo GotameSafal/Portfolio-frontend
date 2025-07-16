@@ -27,13 +27,13 @@ const ProtectedRoute = ({ children }) => {
 const PublicRoute = ({ children }) => {
   const { user, isLoading } = useAuth();
 
-  // if (isLoading) {
-  //   return (
-  //     <div className="flex items-center justify-center min-h-screen">
-  //       Loading...
-  //     </div>
-  //   );
-  // }
+  if (isLoading) {
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        Loading...
+      </div>
+    );
+  }
 
   if (user) {
     return <Navigate to="/dashboard" replace />;
@@ -46,16 +46,14 @@ function AppRoutes() {
   return (
     <Routes>
       <Route path="/" element={<Home />} />
-      <Route path="/login" element={<Login />} />
-
-      {/* <Route
+      <Route
         path="/login"
         element={
           <PublicRoute>
             <Login />
           </PublicRoute>
         }
-      /> */}
+      />
       <Route
         path="/dashboard"
         element={

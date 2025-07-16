@@ -1,6 +1,6 @@
-import { Facebook, Github, Linkedin, Mail, Phone, MapPin } from "lucide-react";
-import Form from "./Form";
 import { motion } from "framer-motion";
+import { Facebook, Github, Linkedin } from "lucide-react";
+import Form from "./Form";
 
 const Contacts = () => {
   // Animation variants
@@ -94,10 +94,10 @@ const Contacts = () => {
           </motion.p>
         </motion.div>
 
-        <div className="grid grid-cols-1 gap-8 lg:grid-cols-2">
+        <div className="flex items-center justify-center">
           {/* Contact Form */}
           <motion.div
-            className="flex flex-col w-full gap-6 p-6 bg-gray-800 rounded-xl shadow-lg border border-gray-700 backdrop-blur-sm relative z-10"
+            className="flex flex-col md:w-1/2 gap-6 p-6 bg-gray-800 rounded-xl shadow-lg border border-gray-700 backdrop-blur-sm relative z-10"
             variants={itemVariants}
           >
             <motion.h3
@@ -109,84 +109,6 @@ const Contacts = () => {
 
             <motion.div variants={itemVariants}>
               <Form />
-            </motion.div>
-          </motion.div>
-
-          {/* Contact Info */}
-          <motion.div
-            className="flex flex-col w-full gap-6 p-6 bg-gray-800 rounded-xl shadow-lg border border-gray-700 backdrop-blur-sm relative z-10"
-            variants={itemVariants}
-          >
-            <motion.h3
-              className="text-2xl font-semibold text-white mb-6"
-              variants={itemVariants}
-            >
-              Contact Information
-            </motion.h3>
-
-            <motion.div className="space-y-6" variants={itemVariants}>
-              <div className="flex items-start space-x-4">
-                <div className="flex items-center justify-center w-12 h-12 rounded-full bg-cyan-500/20">
-                  <Mail className="w-5 h-5 text-cyan-400" />
-                </div>
-                <div>
-                  <h4 className="text-sm font-medium text-gray-400">Email</h4>
-                  <a
-                    href="mailto:lamichhanem36@gmail.com"
-                    className="text-white hover:text-cyan-400 transition-colors"
-                  >
-                    lamichhanem36@gmail.com
-                  </a>
-                </div>
-              </div>
-
-              <div className="flex items-start space-x-4">
-                <div className="flex items-center justify-center w-12 h-12 rounded-full bg-cyan-500/20">
-                  <Phone className="w-5 h-5 text-cyan-400" />
-                </div>
-                <div>
-                  <h4 className="text-sm font-medium text-gray-400">Phone</h4>
-                  <a
-                    href="tel:+9779880000000"
-                    className="text-white hover:text-cyan-400 transition-colors"
-                  >
-                    +977 988 000 0000
-                  </a>
-                </div>
-              </div>
-
-              <div className="flex items-start space-x-4">
-                <div className="flex items-center justify-center w-12 h-12 rounded-full bg-cyan-500/20">
-                  <MapPin className="w-5 h-5 text-cyan-400" />
-                </div>
-                <div>
-                  <h4 className="text-sm font-medium text-gray-400">
-                    Location
-                  </h4>
-                  <p className="text-white">Kathmandu, Nepal</p>
-                </div>
-              </div>
-            </motion.div>
-
-            <motion.div className="mt-6" variants={itemVariants}>
-              <h4 className="text-lg font-medium text-white mb-4">
-                Connect with me
-              </h4>
-              <div className="flex space-x-4">
-                {ContactIcons.map((item, index) => (
-                  <motion.a
-                    key={index}
-                    href={item.url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className={`flex items-center justify-center w-10 h-10 rounded-full ${item.clss} hover:scale-110 transition-transform`}
-                    whileHover={{ y: -5 }}
-                    whileTap={{ scale: 0.95 }}
-                  >
-                    {item.icon}
-                  </motion.a>
-                ))}
-              </div>
             </motion.div>
           </motion.div>
         </div>

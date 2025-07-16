@@ -146,7 +146,7 @@ export const ProjectCard = ({ project, setPreview }) => {
           }}
           className="flex items-center text-sm gap-2 mt-2 md:mt-0 text-blue-400 hover:text-blue-300 transition-colors"
         >
-          <span>Read More</span>
+          <span className="whitespace-nowrap">Read More</span>
           <MoveRight size={16} />
         </button>
       </div>
@@ -174,7 +174,7 @@ const ProjectsData = ({ setPreview }) => {
 
   return (
     <>
-      {projects.map((project, index) => (
+      {projects.map((project) => (
         <div key={project._id || project.id}>
           <div className="bg-gradient-to-r w-full h-[1px] from-transparent via-white to-transparent" />
           <ProjectCard project={project} setPreview={setPreview} />
@@ -198,8 +198,8 @@ const ProjectsLoading = () => (
 const ProjectSection = () => {
   const x = useMotionValue(0);
   const y = useMotionValue(0);
-  const springX = useSpring(x, { damping: 10, stiffness: 50 });
-  const springY = useSpring(y, { damping: 10, stiffness: 50 });
+  const springX = useSpring(x, { damping: 20, stiffness: 50 });
+  const springY = useSpring(y, { damping: 20, stiffness: 50 });
   const [preview, setPreview] = useState(null);
 
   const handleMouseMove = (e) => {

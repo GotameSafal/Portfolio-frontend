@@ -11,6 +11,11 @@ export const AuthProvider = ({ children }) => {
   const [authInitialized, setAuthInitialized] = useState(false);
   const queryClient = useQueryClient();
 
+  // Function to update user state (can be called from login)
+  const updateUser = (userData) => {
+    setUser(userData);
+  };
+
   // Check if token exists on mount
   useEffect(() => {
     const token = Cookies.get("portfolio_token");
@@ -66,7 +71,9 @@ export const AuthProvider = ({ children }) => {
   };
 
   return (
-    <AuthContext.Provider value={{ user, logout, isLoading: !authInitialized }}>
+    <AuthContext.Provider
+      value={{ user, logout, updateUser, isLoading: !authInitialized }}
+    >
       {children}
     </AuthContext.Provider>
   );

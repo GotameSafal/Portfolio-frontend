@@ -85,17 +85,13 @@ const Navbar = () => {
           </div>
 
           <div className="flex items-center space-x-3">
-            <Button
-              asChild
-              variant="outline"
-              size="sm"
-              className="flex w-full text-white bg-transparent border-gray-600 hover:bg-gray-700"
+            <Link
+              to="/login"
+              className="w-full text-white bg-transparent border-gray-600 hover:bg-gray-700 flex items-center gap-1 py-2 px-4 rounded-md"
             >
-              <Link href="/login">
-                <LogIn className="w-4 h-4 mr-2" />
-                Login
-              </Link>
-            </Button>
+              <LogIn className="w-4 h-4 mr-2" />
+              Login
+            </Link>
           </div>
         </div>
 

@@ -1,10 +1,16 @@
 import { useQuery } from "@tanstack/react-query";
 import { Link } from "react-router-dom";
-import { getProjects, getWorkplaces } from "@/lib/api";
+import {
+  getProjects,
+  getWorkplaces,
+  useDeleteProject,
+  useDeleteWorkplace,
+} from "@/lib/api";
 import { useAuth } from "@/contexts/AuthContext";
 import { Trash, Eye, ExternalLink, ChevronRight } from "lucide-react";
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import ConfirmDialog from "@/components/ui/ConfirmDialog";
 
 // Project Detail Modal Component
 const ProjectDetailModal = ({ project, onClose }) => {
@@ -263,7 +269,7 @@ const WorkplaceDetailModal = ({ workplace, onClose }) => {
 };
 
 // Card component for mobile view
-const ProjectCard = ({ project, onView, onDelete }) => {
+const ProjectCard = ({ project, onView, onDelete, isDeleting = false }) => {
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
@@ -311,7 +317,8 @@ const ProjectCard = ({ project, onView, onDelete }) => {
         </button>
         <button
           onClick={() => onDelete(project._id)}
-          className="p-2 rounded-full bg-red-600/20 text-red-400"
+          disabled={isDeleting}
+          className="p-2 rounded-full bg-red-600/20 text-red-400 disabled:opacity-50 disabled:cursor-not-allowed"
         >
           <Trash size={16} />
         </button>
@@ -320,7 +327,7 @@ const ProjectCard = ({ project, onView, onDelete }) => {
   );
 };
 
-const WorkplaceCard = ({ workplace, onView, onDelete }) => {
+const WorkplaceCard = ({ workplace, onView, onDelete, isDeleting = false }) => {
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
@@ -351,7 +358,8 @@ const WorkplaceCard = ({ workplace, onView, onDelete }) => {
         </button>
         <button
           onClick={() => onDelete(workplace._id)}
-          className="p-2 rounded-full bg-red-600/20 text-red-400"
+          disabled={isDeleting}
+          className="p-2 rounded-full bg-red-600/20 text-red-400 disabled:opacity-50 disabled:cursor-not-allowed"
         >
           <Trash size={16} />
         </button>
@@ -364,6 +372,12 @@ const Dashboard = () => {
   const { logout } = useAuth();
   const [selectedProject, setSelectedProject] = useState(null);
   const [selectedWorkplace, setSelectedWorkplace] = useState(null);
+  const [deleteConfirm, setDeleteConfirm] = useState({
+    isOpen: false,
+    type: null, // 'project' or 'workplace'
+    id: null,
+    title: "",
+  });
 
   const { data: projectsData, isLoading: projectsLoading } = useQuery({
     queryKey: ["projects"],
@@ -375,18 +389,44 @@ const Dashboard = () => {
     queryFn: getWorkplaces,
   });
 
+  const deleteProjectMutation = useDeleteProject();
+  const deleteWorkplaceMutation = useDeleteWorkplace();
+
   const handleLogout = async () => {
     await logout();
   };
 
   const handleDeleteProject = (id) => {
-    // Implement delete functionality
-    console.log("Delete project:", id);
+    const project = projectsData?.projects.find((p) => p._id === id);
+    setDeleteConfirm({
+      isOpen: true,
+      type: "project",
+      id,
+      title: project?.title || "this project",
+    });
   };
 
   const handleDeleteWorkplace = (id) => {
-    // Implement delete functionality
-    console.log("Delete workplace:", id);
+    const workplace = workplacesData?.workplaces.find((w) => w._id === id);
+    setDeleteConfirm({
+      isOpen: true,
+      type: "workplace",
+      id,
+      title: workplace?.company || "this workplace",
+    });
+  };
+
+  const confirmDelete = () => {
+    if (deleteConfirm.type === "project") {
+      deleteProjectMutation.mutate(deleteConfirm.id);
+    } else if (deleteConfirm.type === "workplace") {
+      deleteWorkplaceMutation.mutate(deleteConfirm.id);
+    }
+    setDeleteConfirm({ isOpen: false, type: null, id: null, title: "" });
+  };
+
+  const cancelDelete = () => {
+    setDeleteConfirm({ isOpen: false, type: null, id: null, title: "" });
   };
 
   return (
@@ -468,7 +508,8 @@ const Dashboard = () => {
                             </button>
                             <button
                               onClick={() => handleDeleteProject(project._id)}
-                              className="text-red-500 hover:text-red-700"
+                              disabled={deleteProjectMutation.isPending}
+                              className="text-red-500 hover:text-red-700 disabled:opacity-50 disabled:cursor-not-allowed"
                             >
                               <Trash size={18} />
                             </button>
@@ -488,6 +529,7 @@ const Dashboard = () => {
                     project={project}
                     onView={() => setSelectedProject(project)}
                     onDelete={handleDeleteProject}
+                    isDeleting={deleteProjectMutation.isPending}
                   />
                 ))}
               </div>
@@ -554,7 +596,8 @@ const Dashboard = () => {
                               onClick={() =>
                                 handleDeleteWorkplace(workplace._id)
                               }
-                              className="text-red-500 hover:text-red-700"
+                              disabled={deleteWorkplaceMutation.isPending}
+                              className="text-red-500 hover:text-red-700 disabled:opacity-50 disabled:cursor-not-allowed"
                             >
                               <Trash size={18} />
                             </button>
@@ -574,6 +617,7 @@ const Dashboard = () => {
                     workplace={workplace}
                     onView={() => setSelectedWorkplace(workplace)}
                     onDelete={handleDeleteWorkplace}
+                    isDeleting={deleteWorkplaceMutation.isPending}
                   />
                 ))}
               </div>
@@ -601,6 +645,23 @@ const Dashboard = () => {
           />
         )}
       </AnimatePresence>
+
+      {/* Delete Confirmation Dialog */}
+      <ConfirmDialog
+        isOpen={deleteConfirm.isOpen}
+        onClose={cancelDelete}
+        onConfirm={confirmDelete}
+        title={`Delete ${
+          deleteConfirm.type === "project" ? "Project" : "Workplace"
+        }`}
+        message={`Are you sure you want to delete "${deleteConfirm.title}"? This action cannot be undone.`}
+        confirmText="Delete"
+        cancelText="Cancel"
+        type="danger"
+        isLoading={
+          deleteProjectMutation.isPending || deleteWorkplaceMutation.isPending
+        }
+      />
     </div>
   );
 };

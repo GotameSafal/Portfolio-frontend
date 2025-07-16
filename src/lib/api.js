@@ -55,6 +55,21 @@ export const deleteProject = async (id) => {
   return response.data;
 };
 
+export const useDeleteProject = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: deleteProject,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["projects"] });
+      toast.success("Project deleted successfully");
+    },
+    onError: (error) => {
+      toast.error(error.response?.data?.message || "Failed to delete project");
+    },
+  });
+};
+
 // Workplaces API
 export const getWorkplaces = async () => {
   const response = await api.get("/workplaces");
@@ -108,6 +123,23 @@ export const createWorkplaceWithImages = async (workplaceData) => {
 export const deleteWorkplace = async (id) => {
   const response = await api.delete(`/workplaces/${id}`);
   return response.data;
+};
+
+export const useDeleteWorkplace = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: deleteWorkplace,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["workplaces"] });
+      toast.success("Workplace deleted successfully");
+    },
+    onError: (error) => {
+      toast.error(
+        error.response?.data?.message || "Failed to delete workplace"
+      );
+    },
+  });
 };
 
 // Auth API
