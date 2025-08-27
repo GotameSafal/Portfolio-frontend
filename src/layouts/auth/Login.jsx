@@ -16,7 +16,7 @@ const loginSchema = z.object({
     .nonempty({ message: "Email is required" }),
   password: z
     .string()
-    .min(8, { message: "Password must be at least 8 characters" })
+    .min(4, { message: "Password must be at least 4 characters" })
     .nonempty({ message: "Password is required" }),
 });
 
@@ -49,7 +49,8 @@ const Login = () => {
         navigate("/dashboard", { replace: true });
       }
     } catch (err) {
-      toast.error(err?.data?.message || "Error logging in");
+      console.log(err)
+      toast.error(err?.response?.data?.message || "Error logging in");
     }
   };
 
