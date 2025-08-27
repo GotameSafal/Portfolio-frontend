@@ -12,7 +12,7 @@ export default function GradientText({
 
   return (
     <div
-      className={`relative flex flex-row items-start  rounded-[1.25rem]  backdrop-blur transition-shadow duration-500 font-bold overflow-hidden cursor-pointer ${className}`}
+      className={`relative flex flex-row items-start  rounded-[1.25rem]  backdrop-blur w-fit transition-shadow duration-500 font-bold overflow-hidden cursor-pointer ${className}`}
     >
       {showBorder && (
         <div

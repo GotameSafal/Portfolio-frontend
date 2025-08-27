@@ -5,6 +5,7 @@ import Login from "./layouts/auth/Login";
 import { AuthProvider, useAuth } from "./contexts/AuthContext";
 import ProjectForm from "./layouts/dashboard/components/ProjectForm";
 import WorkplaceForm from "./layouts/dashboard/components/WorkplaceForm";
+import SplashCursor from "./components/shared/SplashCursor";
 
 // Protected route component
 const ProtectedRoute = ({ children }) => {
@@ -85,6 +86,7 @@ function AppRoutes() {
 function App() {
   return (
     <AuthProvider>
+      <SplashCursor/>
       <AppRoutes />
     </AuthProvider>
   );

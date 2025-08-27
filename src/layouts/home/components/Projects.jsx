@@ -198,8 +198,8 @@ const ProjectsLoading = () => (
 const ProjectSection = () => {
   const x = useMotionValue(0);
   const y = useMotionValue(0);
-  const springX = useSpring(x, { damping: 20, stiffness: 50 });
-  const springY = useSpring(y, { damping: 20, stiffness: 50 });
+  const springX = useSpring(x, { damping: 40, stiffness: 300 });
+  const springY = useSpring(y, { damping: 40, stiffness: 300 });
   const [preview, setPreview] = useState(null);
 
   const handleMouseMove = (e) => {
