@@ -1,4 +1,7 @@
+import GradientText from "@/components/shared/GradientText";
+import TextType from "@/components/shared/TextType";
 import { motion } from "framer-motion";
+import Particles from "@/components/shared/Particles";
 import {
   Code,
   Database,
@@ -8,7 +11,7 @@ import {
   Send,
   Server,
 } from "lucide-react";
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useMemo, useRef } from "react";
 
 const SkillBadge = ({ icon: Icon, label, ContainerRef }) => (
   <motion.div
@@ -16,7 +19,7 @@ const SkillBadge = ({ icon: Icon, label, ContainerRef }) => (
     dragConstraints={ContainerRef}
     dragElastic={1}
     whileHover={{ scale: 1.05 }}
-    className="flex cursor-grab items-center gap-2 px-3 py-1 border rounded-full bg-white/10 backdrop-blur-md border-white/20"
+    className="flex cursor-grab items-center gap-2 px-3 py-1 border rounded-full bg-white/10 backdrop-blur-md border-white/20 relative z-20"
   >
     <Icon size={16} className="text-blue-400" />
     <span className="text-sm text-white">{label}</span>
@@ -24,23 +27,12 @@ const SkillBadge = ({ icon: Icon, label, ContainerRef }) => (
 );
 
 const HeroSection = () => {
-  const [currentRole, setCurrentRole] = useState("");
   const containerRef = useRef(null);
   const contentRef = useRef(null);
   const roles = useMemo(
     () => ["Full-Stack Developer", "Web Architect", "Front-End Developer"],
     []
   );
-
-  useEffect(() => {
-    let index = 0;
-    const interval = setInterval(() => {
-      setCurrentRole(roles[index]);
-      index = (index + 1) % roles.length;
-    }, 2000);
-
-    return () => clearInterval(interval);
-  }, [roles]);
 
   const handleClick = () => {
     const pdfUrl = "/resume.pdf";
@@ -73,9 +65,20 @@ const HeroSection = () => {
   };
 
   return (
-    <div className="relative min-h-screen overflow-hidden bg-gradient-to-br from-gray-900 via-blue-900 to-black">
-      {/* Animated Background Overlay */}
-      <div className="absolute inset-0 bg-gradient-to-r from-blue-500/10 to-purple-500/10 animate-pulse"></div>
+  <div className="bg-gradient-to-br from-gray-900 via-blue-900 to-black overflow-x-hidden relative h-screen">
+      {/* Particles Background - positioned to be interactive but behind content */}
+      <div className="absolute inset-0 z-0">
+        <Particles
+          particleColors={["#ffffff", "#ffffff"]}
+          particleCount={1200}
+          particleSpread={10}
+          speed={0.1}
+          particleBaseSize={100}
+          moveParticlesOnHover={true}
+          alphaParticles={false}
+          disableRotation={false}
+        />
+      </div>
 
       {/* Floating Tech Elements */}
       <motion.div
@@ -90,7 +93,7 @@ const HeroSection = () => {
           repeat: Infinity,
           ease: "easeInOut",
         }}
-        className="absolute top-20 right-20 text-white/20"
+        className="absolute top-20 right-20 text-white/20 z-5 pointer-events-none"
       >
         <Code size={100} strokeWidth={1} />
       </motion.div>
@@ -107,38 +110,38 @@ const HeroSection = () => {
           repeat: Infinity,
           ease: "easeInOut",
         }}
-        className="absolute bottom-20 left-20 text-white/20"
+        className="absolute bottom-20 left-20 text-white/20 z-5 pointer-events-none"
       >
         <Server size={120} strokeWidth={1} />
       </motion.div>
 
-      <div className="container relative z-10 grid items-center min-h-screen gap-12 px-6 py-12 mx-auto md:grid-cols-2">
+      <div className="container relative z-10 grid items-center h-full gap-12 px-6 py-12 mx-auto md:grid-cols-2">
         {/* Text Content */}
         <motion.div
           initial={{ opacity: 0, x: -50 }}
           animate={{ opacity: 1, x: 0 }}
           transition={{ duration: 0.8 }}
-          className="space-y-6 text-white"
+          className="space-y-6 text-white relative z-20"
           ref={contentRef}
         >
           <div className="space-y-3">
-            <motion.h1
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.2 }}
-              className="text-4xl font-bold tracking-tight md:text-5xl"
+            <GradientText
+              colors={["#40ffaa", "#4079ff", "#40ffaa", "#4079ff", "#40ffaa"]}
+              animationSpeed={3}
+              showBorder={false}
+              className="text-4xl font-bold w-auto tracking-tight md:text-5xl"
             >
-              Safal Gotame
-            </motion.h1>
+              Safal Pariiyar
+            </GradientText>
 
-            <motion.h2
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.4 }}
-              className="h-12 text-2xl text-blue-300 md:text-3xl"
-            >
-              {currentRole}
-            </motion.h2>
+            <TextType
+              text={roles}
+              typingSpeed={75}
+              pauseDuration={1500}
+              showCursor={true}
+              cursorCharacter="_"
+              className="text-2xl font-bold tracking-tight md:text-3xl"
+            />
           </div>
 
           <motion.p
@@ -179,7 +182,7 @@ const HeroSection = () => {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 1 }}
-            className="flex gap-4"
+            className="flex gap-4 relative z-20"
           >
             <motion.button
               whileHover={{ scale: 1.05 }}
@@ -213,7 +216,7 @@ const HeroSection = () => {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 1.2 }}
-            className="flex mt-6 space-x-4"
+            className="flex mt-6 space-x-4 relative z-20"
           >
             <motion.a
               href="https://github.com/GotameSafal"
@@ -242,7 +245,7 @@ const HeroSection = () => {
           initial={{ opacity: 0, x: 50 }}
           animate={{ opacity: 1, x: 0 }}
           transition={{ duration: 0.8 }}
-          className="flex items-center justify-center"
+          className="flex items-center justify-center relative z-20"
         >
           <motion.div
             drag

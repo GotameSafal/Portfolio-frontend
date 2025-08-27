@@ -1,9 +1,26 @@
-@import "tailwindcss";
 @import "tw-animate-css";
+@import "tailwindcss";
 
 @custom-variant dark (&:is(.dark *));
 * {
   scroll-behavior: "smooth";
+}
+@layer utilities {
+  @keyframes gradient {
+    0% {
+      background-position: 0% 50%;
+    }
+    50% {
+      background-position: 100% 50%;
+    }
+    100% {
+      background-position: 0% 50%;
+    }
+  }
+
+  .animate-gradient {
+    animation: gradient 8s linear infinite;
+  }
 }
 @theme inline {
   --radius-sm: calc(var(--radius) - 4px);
