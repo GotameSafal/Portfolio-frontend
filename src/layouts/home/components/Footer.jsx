@@ -59,7 +59,7 @@ const Footer = () => {
           variants={containerVariants}
           initial="hidden"
           whileInView="show"
-          viewport={{ once: true }}
+          viewport={{ once: true, amount: 0.05 }}
         >
           {/* Brand Column */}
           <motion.div
@@ -177,10 +177,10 @@ const Footer = () => {
       {/* Copyright + Tech Stack bar */}
       <motion.div
         className="border-t border-gray-800 py-6"
-        variants={slideIn("up", "spring", 0, 0.9)}
-        initial="hidden"
-        whileInView="show"
-        viewport={{ once: true }}
+        initial={{ opacity: 0, y: 15 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true, amount: 0.05 }}
+        transition={{ type: "spring", stiffness: 100, damping: 15, delay: 0.2 }}
       >
         <div className="max-w-screen-xl mx-auto px-4 flex flex-col md:flex-row justify-between items-center gap-3">
           <motion.p
