@@ -15,6 +15,9 @@ import {
 } from "lucide-react";
 import { useState, useEffect } from "react";
 import { SkillsSection } from "./Skills";
+import SpotifyWidget from "./SpotifyWidget";
+import NepalClockWidget from "./NepalClockWidget";
+import GitHubGridWidget from "./GitHubGridWidget";
 const About = () => {
   const [isHovered, setIsHovered] = useState(false);
 
@@ -22,7 +25,7 @@ const About = () => {
     <motion.div
       onHoverStart={() => setIsHovered(true)}
       onHoverEnd={() => setIsHovered(false)}
-      className="p-4 sm:p-6 flex items-end col-span-3 row-span-2 bg-gradient-to-b from-gray-700 to-gray-800 relative overflow-hidden"
+      className="p-4 sm:p-6 flex items-end col-span-1 sm:col-span-2 md:col-span-3 row-span-2 bg-slate-900/60 border border-white/5 backdrop-blur-md relative overflow-hidden rounded-2xl"
     >
       {/* Animated background elements */}
       <motion.div
@@ -34,7 +37,8 @@ const About = () => {
         transition={{ duration: 0.8 }}
       />
       <img
-        src="assets/coding-pov.png"
+        src="/assets/coding-pov.png"
+        alt="Developer coding at their workstation"
         className="absolute scale-[1.5] -right-[5rem] -top-[1rem] md:scale-[2.5] md:right-0 lg:scale-[2.2] opacity-70 sm:opacity-100"
       />
       <div className="z-10 space-y-3 sm:space-y-4 w-full">
@@ -106,7 +110,7 @@ export const LetsConnect = () => {
 
   return (
     <motion.div
-      className="bg-gradient-to-b col-span-2 from-indigo-800 to-indigo-700 text-white flex flex-col items-center justify-center gap-3 sm:gap-4 p-4 sm:p-6 relative overflow-hidden"
+      className="bg-slate-900/60 border border-white/5 backdrop-blur-md col-span-1 sm:col-span-2 md:col-span-2 text-white flex flex-col items-center justify-center gap-3 sm:gap-4 p-4 sm:p-6 relative overflow-hidden rounded-2xl"
       onHoverStart={() => setIsHovered(true)}
       onHoverEnd={() => setIsHovered(false)}
     >
@@ -404,7 +408,7 @@ const AboutSection = () => {
   ];
 
   return (
-    <section className="relative bg-gradient-to-br from-gray-900 to-gray-800 py-8 sm:py-12 md:py-16 overflow-hidden px-4 sm:px-6">
+    <section className="relative bg-transparent py-8 sm:py-12 md:py-16 overflow-hidden px-4 sm:px-6">
       {/* Animated background elements */}
       <motion.div
         className="absolute top-20 right-20 w-64 h-64 bg-blue-500/5 rounded-full blur-3xl"
@@ -449,12 +453,27 @@ const AboutSection = () => {
         }}
       />
 
+      {/* Section heading */}
+      <motion.div
+        initial={{ opacity: 0, y: -20 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5 }}
+        className="text-center mb-6 sm:mb-8"
+      >
+        <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-white">
+          About <span className="text-blue-400">Me</span>
+        </h2>
+        <p className="text-gray-400 mt-2 text-sm sm:text-base max-w-xl mx-auto">
+          A little bit about who I am and what I do.
+        </p>
+      </motion.div>
+
       <div className="md:grid space-y-4 md:space-y-0 grid-cols-1 max-w-screen-lg mx-auto w-full sm:grid-cols-2 md:grid-cols-6 gap-4 my-6 sm:my-8 md:my-12 md:auto-rows-[18rem] *:rounded-xl *:w-full *:h-full relative z-10">
         <About />
 
         {/* Enhanced My Approach section */}
         <motion.div
-          className="col-span-1 sm:col-span-2 md:col-span-3 bg-gradient-to-b from-cyan-800 to-cyan-900 p-4 sm:p-6 flex flex-col justify-center relative overflow-hidden"
+          className="col-span-1 sm:col-span-2 md:col-span-3 bg-slate-900/60 border border-white/5 backdrop-blur-md p-4 sm:p-6 flex flex-col justify-center relative overflow-hidden rounded-2xl"
           onHoverStart={() => setHoverApproach(true)}
           onHoverEnd={() => setHoverApproach(false)}
         >
@@ -559,7 +578,7 @@ const AboutSection = () => {
         </motion.div>
 
         {/* Interactive Card Carousel with auto-switching */}
-        <div className="col-span-1 sm:col-span-2 md:col-span-3 bg-gradient-to-b from-purple-900 to-indigo-900 p-4 sm:p-6 overflow-hidden relative">
+        <div className="col-span-1 sm:col-span-2 md:col-span-3 bg-slate-900/60 border border-white/5 backdrop-blur-md p-4 sm:p-6 overflow-hidden relative rounded-2xl">
           {/* Background effects */}
           <div className="absolute inset-0 opacity-10">
             <motion.div
@@ -649,6 +668,11 @@ const AboutSection = () => {
 
         <LetsConnect />
         <SkillsSection />
+
+        {/* ── Second Bento Row: Live Widgets ── */}
+        <SpotifyWidget />
+        <NepalClockWidget />
+        <GitHubGridWidget />
       </div>
 
       {/* Process Modal */}

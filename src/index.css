@@ -3,7 +3,7 @@
 
 @custom-variant dark (&:is(.dark *));
 * {
-  scroll-behavior: "smooth";
+  scroll-behavior: smooth;
 }
 @layer utilities {
   @keyframes gradient {
@@ -147,5 +147,6 @@
   }
   body {
     @apply bg-background text-foreground;
+    font-family: 'Inter', sans-serif;
   }
 }

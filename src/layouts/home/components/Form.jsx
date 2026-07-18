@@ -4,7 +4,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation } from "@tanstack/react-query";
 import { Loader2 } from "lucide-react";
 import { useEffect } from "react";
-import { useForm } from "react-hook-form";
+import { useForm, useWatch } from "react-hook-form";
 import { toast } from "react-toastify";
 import { z } from "zod";
 
@@ -35,6 +35,7 @@ const Form = () => {
     register,
     handleSubmit,
     reset,
+    control,
     formState: { errors, isSubmitSuccessful },
   } = useForm({
     resolver: zodResolver(formSchema),
@@ -45,6 +46,8 @@ const Form = () => {
       message: "",
     },
   });
+
+  const messageValue = useWatch({ control, name: "message", defaultValue: "" });
 
   const { mutate, isPending, isSuccess, isError, error } = useMutation({
     mutationFn: sendContactEmail,
@@ -68,12 +71,12 @@ const Form = () => {
   }, [isSubmitSuccessful, reset]);
 
   return (
-    <form onSubmit={handleSubmit(submitForm)} className="space-y-4">
+    <form onSubmit={handleSubmit(submitForm)} className="space-y-4 font-sans text-xs">
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
         <div>
           <label
             htmlFor="fullname"
-            className="block text-sm font-medium text-gray-100"
+            className="block text-[10px] font-semibold uppercase tracking-wider text-gray-400 mb-1"
           >
             Full Name
           </label>
@@ -81,11 +84,11 @@ const Form = () => {
             type="text"
             id="fullname"
             {...register("fullname")}
-            className="w-full px-4 py-2 mt-1 text-gray-100 placeholder-gray-400 bg-gray-800 border border-gray-700 rounded-md focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:border-transparent"
+            className="w-full px-3 py-2 text-white placeholder-gray-500 bg-black/40 border border-white/10 rounded-lg focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all"
             placeholder="John Doe"
           />
           {errors.fullname && (
-            <p className="mt-1 text-sm text-red-400">
+            <p className="mt-1 text-[10px] text-red-400">
               {errors.fullname.message}
             </p>
           )}
@@ -94,19 +97,19 @@ const Form = () => {
         <div>
           <label
             htmlFor="email"
-            className="block text-sm font-medium text-gray-100"
+            className="block text-[10px] font-semibold uppercase tracking-wider text-gray-400 mb-1"
           >
-            Email
+            Email Address
           </label>
           <input
             type="email"
             id="email"
             {...register("email")}
-            className="w-full px-4 py-2 mt-1 text-gray-100 placeholder-gray-400 bg-gray-800 border border-gray-700 rounded-md focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:border-transparent"
+            className="w-full px-3 py-2 text-white placeholder-gray-500 bg-black/40 border border-white/10 rounded-lg focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all"
             placeholder="john@example.com"
           />
           {errors.email && (
-            <p className="mt-1 text-sm text-red-400">{errors.email.message}</p>
+            <p className="mt-1 text-[10px] text-red-400">{errors.email.message}</p>
           )}
         </div>
       </div>
@@ -114,7 +117,7 @@ const Form = () => {
       <div>
         <label
           htmlFor="phone"
-          className="block text-sm font-medium text-gray-100"
+          className="block text-[10px] font-semibold uppercase tracking-wider text-gray-400 mb-1"
         >
           Phone Number
         </label>
@@ -122,42 +125,51 @@ const Form = () => {
           type="text"
           id="phone"
           {...register("phone")}
-          className="w-full px-4 py-2 mt-1 text-gray-100 placeholder-gray-400 bg-gray-800 border border-gray-700 rounded-md focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:border-transparent"
+          className="w-full px-3 py-2 text-white placeholder-gray-500 bg-black/40 border border-white/10 rounded-lg focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all"
           placeholder="9876543210"
         />
         {errors.phone && (
-          <p className="mt-1 text-sm text-red-400">{errors.phone.message}</p>
+          <p className="mt-1 text-[10px] text-red-400">{errors.phone.message}</p>
         )}
       </div>
 
       <div>
         <label
           htmlFor="message"
-          className="block text-sm font-medium text-gray-100"
+          className="block text-[10px] font-semibold uppercase tracking-wider text-gray-400 mb-1"
         >
-          Message
+          Your Message
         </label>
         <textarea
           id="message"
           rows="4"
           {...register("message")}
-          className="w-full px-4 py-2 mt-1 text-gray-100 placeholder-gray-400 bg-gray-800 border border-gray-700 rounded-md focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:border-transparent resize-none"
-          placeholder="Your message here..."
+          className="w-full px-3 py-2 text-white placeholder-gray-500 bg-black/40 border border-white/10 rounded-lg focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all resize-none"
+          placeholder="Describe your project, ideas, or questions..."
         ></textarea>
-        {errors.message && (
-          <p className="mt-1 text-sm text-red-400">{errors.message.message}</p>
-        )}
+        <div className="flex justify-between items-center mt-1">
+          {errors.message ? (
+            <p className="text-[10px] text-red-400">{errors.message.message}</p>
+          ) : (
+            <span />
+          )}
+          <span className={`text-[10px] tabular-nums ${
+            messageValue.length > 9000 ? "text-red-400" : "text-gray-500"
+          }`}>
+            {messageValue.length} / 10,000
+          </span>
+        </div>
       </div>
 
       <Button
         type="submit"
         disabled={isPending}
-        className="w-full py-3 font-medium text-white transition-all duration-300 bg-gradient-to-r from-cyan-500 to-blue-500 rounded-md hover:from-cyan-600 hover:to-blue-600 focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:ring-offset-2 focus:ring-offset-gray-900"
+        className="w-full py-2.5 font-bold text-white transition-all duration-300 bg-gradient-to-r from-blue-600 to-cyan-500 rounded-lg hover:from-blue-500 hover:to-cyan-400 focus:outline-none focus:ring-2 focus:ring-blue-500 shadow-md shadow-blue-500/10 cursor-pointer"
       >
         {isPending ? (
           <>
             <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-            Sending...
+            Sending Message...
           </>
         ) : (
           "Send Message"
@@ -165,13 +177,13 @@ const Form = () => {
       </Button>
 
       {isSuccess && (
-        <p className="text-center text-green-400">
+        <p className="text-center text-[10px] text-green-400">
           Message sent successfully! I'll get back to you soon.
         </p>
       )}
 
       {isError && (
-        <p className="text-center text-red-400">
+        <p className="text-center text-[10px] text-red-400">
           {error?.message || "Failed to send message. Please try again."}
         </p>
       )}

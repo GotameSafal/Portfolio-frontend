@@ -1,6 +1,7 @@
 import { slideIn } from "@/lib/motion_function";
 import { motion } from "framer-motion";
-import { Facebook, Github, Linkedin, Mail, MapPin, Phone } from "lucide-react";
+import { Facebook, Github, Linkedin, Mail, MapPin } from "lucide-react";
+
 import { Link } from "react-router-dom";
 
 // Import ContactIcons from Contacts component to maintain consistency
@@ -22,7 +23,6 @@ const Footer = () => {
   const contactInfo = [
     { icon: <MapPin size={16} />, text: "Kathmandu, Nepal" },
     { icon: <Mail size={16} />, text: "lamichhanem36@gmail.com" },
-    { icon: <Phone size={16} />, text: "+977 9861234567" },
   ];
 
   // Animation variants
@@ -51,7 +51,7 @@ const Footer = () => {
   };
 
   return (
-    <footer className="bg-gradient-to-b from-gray-900 to-black border-t border-gray-800">
+    <footer className="bg-transparent border-t border-white/5">
       {/* Main Footer Content */}
       <div className="max-w-screen-xl mx-auto px-4 py-12 md:py-16">
         <motion.div
@@ -121,14 +121,25 @@ const Footer = () => {
             <ul className="space-y-3">
               {footerLinks.map((link, index) => (
                 <motion.li key={index}>
-                  <motion.a
-                    href={link.path}
-                    className="text-gray-400 hover:text-[#0ef] transition-colors flex items-center space-x-2"
-                    whileHover={{ x: 5, color: "#0ef" }}
-                  >
-                    <span>→</span>
-                    <span>{link.name}</span>
-                  </motion.a>
+                  {link.path.startsWith("#") ? (
+                    <motion.a
+                      href={link.path}
+                      className="text-gray-400 hover:text-[#0ef] transition-colors flex items-center space-x-2"
+                      whileHover={{ x: 5 }}
+                    >
+                      <span>→</span>
+                      <span>{link.name}</span>
+                    </motion.a>
+                  ) : (
+                    <MotionLink
+                      to={link.path}
+                      className="text-gray-400 hover:text-[#0ef] transition-colors flex items-center space-x-2"
+                      whileHover={{ x: 5 }}
+                    >
+                      <span>→</span>
+                      <span>{link.name}</span>
+                    </MotionLink>
+                  )}
                 </motion.li>
               ))}
             </ul>
@@ -163,7 +174,7 @@ const Footer = () => {
         </motion.div>
       </div>
 
-      {/* Copyright Bar */}
+      {/* Copyright + Tech Stack bar */}
       <motion.div
         className="border-t border-gray-800 py-6"
         variants={slideIn("up", "spring", 0, 0.9)}
@@ -171,7 +182,7 @@ const Footer = () => {
         whileInView="show"
         viewport={{ once: true }}
       >
-        <div className="max-w-screen-xl mx-auto px-4 flex flex-col md:flex-row justify-between items-center">
+        <div className="max-w-screen-xl mx-auto px-4 flex flex-col md:flex-row justify-between items-center gap-3">
           <motion.p
             className="text-gray-400 text-sm text-center md:text-left"
             whileHover={{ color: "#0ef" }}
@@ -180,23 +191,34 @@ const Footer = () => {
             Rights Reserved.
           </motion.p>
 
+          {/* Tech badges */}
+          <div className="flex flex-wrap justify-center gap-2">
+            {[
+              { label: "React 19", color: "text-cyan-400 border-cyan-500/30 bg-cyan-950/20" },
+              { label: "Vite 7", color: "text-violet-400 border-violet-500/30 bg-violet-950/20" },
+              { label: "Tailwind 4", color: "text-sky-400 border-sky-500/30 bg-sky-950/20" },
+              { label: "Framer Motion", color: "text-pink-400 border-pink-500/30 bg-pink-950/20" },
+            ].map(({ label, color }) => (
+              <span
+                key={label}
+                className={`px-2 py-0.5 text-[10px] font-mono border rounded-full ${color}`}
+              >
+                {label}
+              </span>
+            ))}
+          </div>
+
           <motion.p
             className="text-gray-500 text-xs mt-2 md:mt-0"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.5 }}
           >
-            Designed & Developed with
+            Designed &amp; Developed with
             <motion.span
               className="text-red-500 mx-1"
-              animate={{
-                scale: [1, 1.2, 1],
-              }}
-              transition={{
-                duration: 1.5,
-                repeat: Infinity,
-                repeatType: "loop",
-              }}
+              animate={{ scale: [1, 1.2, 1] }}
+              transition={{ duration: 1.5, repeat: Infinity, repeatType: "loop" }}
             >
               ♥
             </motion.span>

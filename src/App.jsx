@@ -1,11 +1,15 @@
 import { Route, Routes, Navigate } from "react-router-dom";
+import { useState } from "react";
 import Home from "./layouts/home/Home";
 import Dashboard from "./layouts/dashboard/Dashboard";
 import Login from "./layouts/auth/Login";
 import { AuthProvider, useAuth } from "./contexts/AuthContext";
 import ProjectForm from "./layouts/dashboard/components/ProjectForm";
 import WorkplaceForm from "./layouts/dashboard/components/WorkplaceForm";
-import SplashCursor from "./components/shared/SplashCursor";
+import DevConsole from "./components/shared/DevConsole";
+import SiteDiagnostics from "./components/shared/SiteDiagnostics";
+import KeyboardShortcuts from "./components/shared/KeyboardShortcuts";
+import Navbar from "./components/shared/Navbar";
 
 // Protected route component
 const ProtectedRoute = ({ children }) => {
@@ -25,6 +29,7 @@ const ProtectedRoute = ({ children }) => {
 
   return children;
 };
+
 const PublicRoute = ({ children }) => {
   const { user, isLoading } = useAuth();
 
@@ -84,12 +89,39 @@ function AppRoutes() {
 }
 
 function App() {
+  const [isConsoleOpen, setIsConsoleOpen] = useState(false);
+  const [isDiagnosticsOpen, setIsDiagnosticsOpen] = useState(false);
+
+  const toggleConsole = () => setIsConsoleOpen((prev) => !prev);
+  const toggleDiagnostics = () => setIsDiagnosticsOpen((prev) => !prev);
+
   return (
     <AuthProvider>
-      <SplashCursor/>
+      <Navbar onToggleConsole={import.meta.env.DEV ? toggleConsole : undefined} />
+      {import.meta.env.DEV && (
+        <>
+          <DevConsole
+            isOpen={isConsoleOpen}
+            onClose={() => setIsConsoleOpen(false)}
+            onOpenDiagnostics={() => {
+              setIsConsoleOpen(false);
+              setIsDiagnosticsOpen(true);
+            }}
+          />
+          <SiteDiagnostics
+            isOpen={isDiagnosticsOpen}
+            onClose={() => setIsDiagnosticsOpen(false)}
+          />
+          <KeyboardShortcuts
+            onToggleConsole={toggleConsole}
+            onToggleDiagnostics={toggleDiagnostics}
+          />
+        </>
+      )}
       <AppRoutes />
     </AuthProvider>
   );
 }
 
 export default App;
+
