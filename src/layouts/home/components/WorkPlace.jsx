@@ -64,39 +64,89 @@ const WorkplaceImageGrid = ({ images = [] }) => {
 };
 
 // ── Single timeline entry content ────────────────────────────────────────────
-const WorkplaceContent = ({ description, images }) => (
-  <motion.div
-    initial={{ opacity: 0, y: 20 }}
-    whileInView={{ opacity: 1, y: 0 }}
-    transition={{ duration: 0.5 }}
-  >
-    <p className="mb-8 text-xs font-normal text-neutral-300 md:text-sm dark:text-neutral-200">
-      {description}
-    </p>
-    <WorkplaceImageGrid images={images} />
-  </motion.div>
-);
+const WorkplaceContent = ({ description, images }) => {
+  const renderDescription = () => {
+    if (Array.isArray(description)) {
+      return (
+        <ul className="mb-8 list-disc list-inside space-y-1 text-xs font-normal text-neutral-300 md:text-sm dark:text-neutral-200">
+          {description.map((item, idx) => (
+            <li key={idx} className="leading-relaxed pl-1">{item}</li>
+          ))}
+        </ul>
+      );
+    }
+    
+    if (typeof description === "string") {
+      // Split by newlines or bullet characters if present
+      const lines = description
+        .split(/\n|●/)
+        .map(line => line.trim())
+        .filter(line => line.length > 0);
+
+      if (lines.length > 1) {
+        return (
+          <ul className="mb-8 list-disc list-inside space-y-1 text-xs font-normal text-neutral-300 md:text-sm dark:text-neutral-200">
+            {lines.map((item, idx) => (
+              <li key={idx} className="leading-relaxed pl-1">{item}</li>
+            ))}
+          </ul>
+        );
+      }
+
+      return (
+        <p className="mb-8 text-xs font-normal text-neutral-300 md:text-sm dark:text-neutral-200 leading-relaxed">
+          {description}
+        </p>
+      );
+    }
+    
+    return null;
+  };
+
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.5 }}
+    >
+      {renderDescription()}
+      {images && images.length > 0 && <WorkplaceImageGrid images={images} />}
+    </motion.div>
+  );
+};
 
 // ── Static fallback data ─────────────────────────────────────────────────────
 const fallbackData = [
   {
-    date: "2021–2024",
-    title: "Webstudio Nepal",
-    job: "Frontend Developer",
+    date: "Jan 2024 – Present",
+    title: "Web Studio Nepal",
+    job: "Full Stack Developer",
     content: (
       <WorkplaceContent
-        description="Built and launched Aceternity UI and Aceternity UI Pro from scratch"
+        description={[
+          "Develop production web applications using React, Next.js, TypeScript, Node.js, Express.js, and MongoDB.",
+          "Collaborate with designers and backend engineers to deliver responsive, production-ready software.",
+          "Design reusable UI components and modular application structures to improve maintainability.",
+          "Integrate REST APIs and third-party services into client applications.",
+          "Optimize application performance, accessibility, responsiveness, and SEO.",
+          "Participate in testing, debugging, deployment, and Git-based collaborative development.",
+          "Contributed to projects across e-commerce, healthcare, restaurant management, education, and enterprise domains."
+        ]}
         images={[]}
       />
     ),
   },
   {
-    date: "2019–2021",
-    title: "Freelance Developer",
-    job: "Full Stack Developer",
+    date: "Aug 2023 – Jan 2024",
+    title: "Raechal Enterprise",
+    job: "Security Analyst",
     content: (
       <WorkplaceContent
-        description="Developed custom web applications and e-commerce solutions for clients"
+        description={[
+          "Performed security monitoring and basic vulnerability assessments.",
+          "Worked with developers to encourage secure coding practices.",
+          "Supported incident monitoring and documentation."
+        ]}
         images={[]}
       />
     ),
@@ -127,7 +177,11 @@ const WorkplaceData = () => {
           job: wp.position || "Position",
           content: (
             <WorkplaceContent
-              description={wp.description || "No description available"}
+              description={
+                wp.responsibilities && wp.responsibilities.length > 0
+                  ? wp.responsibilities
+                  : wp.description || "No description available"
+              }
               images={get(wp, "images", [])}
             />
           ),
