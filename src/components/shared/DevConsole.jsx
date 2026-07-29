@@ -15,29 +15,38 @@ const COMMANDS = {
     "  skills       — Technical proficiency",
     "  projects     — Portfolio projects",
     "  contact      — Contact details",
-    "  diagnostics  — Site health metrics",
+    "  diagnostics  — Site health metrics  (dev only)",
     "  clear        — Clear the screen",
     "  exit         — Close the console",
     "  sudo hire    — Proceed to checkout!",
   ],
   about: () => [
     "About Safal Gotame:",
-    "  Full Stack Developer · 2+ years experience",
-    "  React · Node.js · Express · SQL/NoSQL · Microservices",
-    "  Building creative, performant web interfaces.",
+    "  Full Stack Developer · Based in Kathmandu, Nepal",
+    "  2+ years experience at Web Studio Nepal",
+    "  React · Next.js · Node.js · TypeScript · MongoDB",
+    "  Passionate about clean code, real-time systems &",
+    "  delightful user interfaces.",
   ],
   skills: () => [
     "Technical Proficiency:",
-    "  React/Next.js  [████████████████████] 95%",
-    "  Node/Express   [██████████████████  ] 90%",
-    "  SQL/NoSQL      [█████████████████   ] 85%",
-    "  Docker/DevOps  [███████████████     ] 75%",
+    "  React/Next.js    [████████████████████] 90%",
+    "  Node.js/Express  [██████████████████  ] 88%",
+    "  TypeScript       [█████████████████   ] 85%",
+    "  MongoDB/SQL      [█████████████████   ] 82%",
+    "  React Native     [████████████████    ] 80%",
+    "  Docker/DevOps    [████████████        ] 65%",
+    "  Python/FastAPI   [████████████        ] 60%",
   ],
   projects: () => [
     "Portfolio Projects:",
-    "  1. AI Portfolio Intelligence  (Python · FastAPI · React)",
-    "  2. Decentralized Social Net   (Solidity · React Native)",
-    "  Tip: type 'sudo hire' to proceed to checkout!",
+    "  1. Smart Farm Management System",
+    "     → Next.js · Node.js · MongoDB · TypeScript",
+    "  2. StreamVault (Media Harvest)",
+    "     → FastAPI · Python · React · Tauri · yt-dlp",
+    "  3. OmniNode IoT Platform",
+    "     → React Native · Expo · Node.js · MQTT · TypeScript",
+    "  Tip: type 'sudo hire' to get in touch!",
   ],
   contact: () => [
     "Contact:",
@@ -46,6 +55,7 @@ const COMMANDS = {
     "  GitHub   → github.com/GotameSafal",
   ],
 };
+
 
 const DevConsole = ({ isOpen, onClose, onOpenDiagnostics }) => {
   const [history, setHistory] = useState([

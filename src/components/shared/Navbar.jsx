@@ -138,16 +138,14 @@ const Navbar = ({ onToggleConsole }) => {
           </div>
 
           <div className="flex items-center space-x-3">
-            {import.meta.env.DEV && (
-              <button
-                onClick={onToggleConsole}
-                title="Open Developer Console (`)"
-                className="flex items-center gap-1.5 px-3 py-2 text-xs font-mono text-emerald-400 border border-emerald-500/30 bg-emerald-950/30 rounded-md hover:bg-emerald-900/40 transition-colors"
-              >
-                <TerminalSquare size={14} />
-                <span className="hidden lg:inline">~$ console</span>
-              </button>
-            )}
+            <button
+              onClick={onToggleConsole}
+              title="Open Developer Console (`)" 
+              className="flex items-center gap-1.5 px-3 py-2 text-xs font-mono text-emerald-400 border border-emerald-500/30 bg-emerald-950/30 rounded-md hover:bg-emerald-900/40 transition-colors"
+            >
+              <TerminalSquare size={14} />
+              <span className="hidden lg:inline">~$ console</span>
+            </button>
             <Link
               to="/login"
               className="text-gray-500 hover:text-gray-300 text-xs transition-colors px-2 py-1"
@@ -225,15 +223,13 @@ const Navbar = ({ onToggleConsole }) => {
                 transition={{ delay: 0.4, duration: 0.3 }}
                 className="mt-4 space-y-3"
               >
-                {import.meta.env.DEV && (
-                  <button
-                    onClick={() => { onToggleConsole(); toggleMenu(); }}
-                    className="w-full flex items-center gap-2 px-4 py-2 text-xs font-mono text-emerald-400 border border-emerald-500/30 bg-emerald-950/30 rounded-md hover:bg-emerald-900/40 transition-colors"
-                  >
-                    <TerminalSquare size={14} />
-                    ~$ Open Developer Console
-                  </button>
-                )}
+                <button
+                  onClick={() => { onToggleConsole(); toggleMenu(); }}
+                  className="w-full flex items-center gap-2 px-4 py-2 text-xs font-mono text-emerald-400 border border-emerald-500/30 bg-emerald-950/30 rounded-md hover:bg-emerald-900/40 transition-colors"
+                >
+                  <TerminalSquare size={14} />
+                  ~$ Open Developer Console
+                </button>
                 <Link
                   to="/login"
                   onClick={toggleMenu}

@@ -97,27 +97,32 @@ function App() {
 
   return (
     <AuthProvider>
-      <Navbar onToggleConsole={import.meta.env.DEV ? toggleConsole : undefined} />
+      {/* Navbar — always passes toggleConsole so the hidden shortcut works everywhere */}
+      <Navbar onToggleConsole={toggleConsole} />
+
+      {/* DevConsole — available in production as an interactive portfolio easter egg */}
+      <DevConsole
+        isOpen={isConsoleOpen}
+        onClose={() => setIsConsoleOpen(false)}
+        onOpenDiagnostics={() => {
+          setIsConsoleOpen(false);
+          if (import.meta.env.DEV) setIsDiagnosticsOpen(true);
+        }}
+      />
+      {/* KeyboardShortcuts — backtick toggle works for everyone */}
+      <KeyboardShortcuts
+        onToggleConsole={toggleConsole}
+        onToggleDiagnostics={import.meta.env.DEV ? toggleDiagnostics : () => {}}
+      />
+
+      {/* SiteDiagnostics — internal metrics, dev-only */}
       {import.meta.env.DEV && (
-        <>
-          <DevConsole
-            isOpen={isConsoleOpen}
-            onClose={() => setIsConsoleOpen(false)}
-            onOpenDiagnostics={() => {
-              setIsConsoleOpen(false);
-              setIsDiagnosticsOpen(true);
-            }}
-          />
-          <SiteDiagnostics
-            isOpen={isDiagnosticsOpen}
-            onClose={() => setIsDiagnosticsOpen(false)}
-          />
-          <KeyboardShortcuts
-            onToggleConsole={toggleConsole}
-            onToggleDiagnostics={toggleDiagnostics}
-          />
-        </>
+        <SiteDiagnostics
+          isOpen={isDiagnosticsOpen}
+          onClose={() => setIsDiagnosticsOpen(false)}
+        />
       )}
+
       <AppRoutes />
     </AuthProvider>
   );
