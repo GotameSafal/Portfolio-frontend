@@ -196,7 +196,7 @@ export const sendContactEmail = async (formData) => {
     console.error("Email sending error:", error);
     throw new Error(
       error.response?.data?.message ||
-        "Failed to send message. Please try again later."
+      "Failed to send message. Please try again later."
     );
   }
 };

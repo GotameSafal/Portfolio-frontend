@@ -9,29 +9,42 @@ import { Suspense, useState, useMemo } from "react";
 const fallbackProjects = [
   {
     id: 1,
-    title: "Portfolio Website",
+    title: "Smart Farm Management System",
     description:
-      "This portfolio — built with React, Vite, Tailwind CSS and Framer Motion. Fully responsive with a CMS-backed dashboard.",
+      "A comprehensive web-based SaaS solution for modern farm operations, tracking livestock, breeding, inventory, and financial reports.",
     detailedDescription:
-      "A personal portfolio with a custom admin dashboard. Projects and work experience are managed via a REST API backend. Features smooth animations, a particle hero, and bento-grid about section.",
-    technologies: ["React", "Node.js", "MongoDB", "Tailwind CSS", "Framer Motion"],
-    githubLink: "https://github.com/GotameSafal",
+      "A precision digital farming platform that enables livestock batch management, breeding/lineage tracing with automated offspring tracking, real-time inventory alerts for feed & medicine, and batch-level profit & loss reports with dynamic multi-currency configurations.",
+    technologies: ["React", "Next.js", "TypeScript", "Node.js", "Express.js", "MongoDB", "Tailwind CSS", "HeroUI"],
+    githubLink: "https://github.com/GotameSafal/Smart-Farm",
     liveLink: "#",
-    image: "",
+    image: "https://images.unsplash.com/photo-1586771107445-d3ca888129ff?q=80&w=800&auto=format&fit=crop",
   },
   {
     id: 2,
-    title: "Coming Soon",
+    title: "StreamVault (Media Harvest)",
     description:
-      "More projects are on the way. Check my GitHub for the latest work.",
+      "A production-grade, privacy-focused media downloading ecosystem and local-first media toolkit powered by yt-dlp and FFmpeg.",
     detailedDescription:
-      "Visit my GitHub profile at github.com/GotameSafal to see all repositories and ongoing work.",
-    technologies: ["React", "Node.js"],
-    githubLink: "https://github.com/GotameSafal",
-    liveLink: "https://github.com/GotameSafal",
-    image: "",
+      "A complete cross-platform ecosystem to download media from standard platforms. Features intelligent stream-copy video clipping, WebSocket-based live progress broadcasts, and a plugin/AI service layer. Includes a FastAPI server, a rich CLI, a Chrome Extension, and a Tauri desktop application.",
+    technologies: ["FastAPI", "Python", "SQLite", "React", "Tailwind CSS", "Tauri", "Chrome Extension API", "yt-dlp", "FFmpeg"],
+    githubLink: "https://github.com/GotameSafal/MediaHarvest",
+    liveLink: "#",
+    image: "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=800&auto=format&fit=crop",
+  },
+  {
+    id: 3,
+    title: "OmniNode IoT Platform",
+    description:
+      "A dual-component IoT platform featuring a React Native mobile dashboard and a high-performance Node.js server broker.",
+    detailedDescription:
+      "A real-time IoT monitoring system. It combines 'iot-mobile' (a cross-platform React Native dashboard styled with Tamagui that displays live device telemetry, interactive graphs, and push notification thresholds) with 'iot-server' (a robust TypeScript Node.js backend acting as a gateway and API broker for device communication).",
+    technologies: ["React Native", "Expo", "Tamagui", "Node.js", "TypeScript", "Express", "WebSockets", "MQTT", "MongoDB"],
+    githubLink: "https://github.com/GotameSafal/OmniNode",
+    liveLink: "#",
+    image: "https://images.unsplash.com/photo-1518770660439-4636190af475?q=80&w=800&auto=format&fit=crop",
   },
 ];
+
 
 // Reusable architecture node block
 const ArchNode = ({ icon: Icon, label, colorClass }) => (
@@ -383,7 +396,9 @@ const ProjectsLoading = () => (
 const ProjectSection = () => {
   const [filter, setFilter] = useState("All");
 
-  const categories = ["All", "React", "Node.js", "Python", "Solidity"];
+  const categories = ["All", "React", "Node.js", "Python", "TypeScript", "IoT"];
+
+
 
   return (
     <section
