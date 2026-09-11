@@ -7,7 +7,7 @@ import {
   useDeleteWorkplace,
 } from "@/lib/api";
 import { useAuth } from "@/contexts/AuthContext";
-import { Trash, Eye, ExternalLink, ChevronRight } from "lucide-react";
+import { Trash, Eye, ExternalLink, ChevronRight, Video } from "lucide-react";
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import ConfirmDialog from "@/components/ui/ConfirmDialog";
@@ -95,6 +95,22 @@ const ProjectDetailModal = ({ project, onClose }) => {
             </div>
           </div>
 
+          {project.videoUrl && (
+            <div>
+              <h4 className="text-lg font-semibold text-rose-400 mb-2 flex items-center gap-2">
+                <Video size={18} />
+                <span>Demo Video (Cloudinary / MP4)</span>
+              </h4>
+              <div className="rounded-lg overflow-hidden bg-black border border-gray-700">
+                <video
+                  src={project.videoUrl}
+                  controls
+                  className="w-full max-h-56 object-contain"
+                />
+              </div>
+            </div>
+          )}
+
           <div className="flex flex-wrap gap-3 pt-4">
             {project.liveLink && (
               <a
@@ -116,6 +132,17 @@ const ProjectDetailModal = ({ project, onClose }) => {
               >
                 <ExternalLink size={16} />
                 <span>GitHub</span>
+              </a>
+            )}
+            {project.videoUrl && (
+              <a
+                href={project.videoUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center gap-2 px-4 py-2 bg-rose-600 rounded-md hover:bg-rose-700 transition-colors text-sm sm:text-base"
+              >
+                <Video size={16} />
+                <span>Watch Video</span>
               </a>
             )}
           </div>
@@ -481,7 +508,14 @@ const Dashboard = () => {
                     {projectsData?.projects.map((project) => (
                       <tr key={project._id}>
                         <td className="px-6 py-4 whitespace-nowrap text-sm">
-                          {project.title}
+                          <div className="flex items-center gap-2">
+                            <span className="font-medium text-white">{project.title}</span>
+                            {project.videoUrl && (
+                              <span title="Video demo available" className="px-1.5 py-0.5 text-[10px] bg-rose-500/20 text-rose-300 rounded border border-rose-500/30 flex items-center gap-1">
+                                <Video size={10} /> Video
+                              </span>
+                            )}
+                          </div>
                         </td>
                         <td className="px-6 py-4 text-sm truncate max-w-xs">
                           {project.description}

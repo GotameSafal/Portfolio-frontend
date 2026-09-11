@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { createProject } from "@/lib/api";
 import { Input } from "@/components/ui/input";
-import { X, Plus } from "lucide-react";
+import { X, Plus, Video } from "lucide-react";
 
 const ProjectForm = () => {
   const navigate = useNavigate();
@@ -15,6 +15,7 @@ const ProjectForm = () => {
     detailedDescription: "",
     liveLink: "",
     githubLink: "",
+    videoUrl: "",
     technologies: [],
     file: null,
   });
@@ -147,7 +148,7 @@ const ProjectForm = () => {
             />
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div>
               <label className="block text-sm font-medium text-gray-300 mb-1">
                 Live Link
@@ -174,7 +175,38 @@ const ProjectForm = () => {
                 placeholder="https://github.com/username/repo"
               />
             </div>
+
+            <div>
+              <label className="block text-sm font-medium text-gray-300 mb-1 flex items-center gap-1.5">
+                <Video size={14} className="text-purple-400" />
+                <span>Video Demo URL (Cloudinary / MP4)</span>
+              </label>
+              <Input
+                name="videoUrl"
+                value={formData.videoUrl}
+                onChange={handleChange}
+                className="bg-gray-700 border-gray-600"
+                placeholder="https://res.cloudinary.com/... or video link"
+              />
+            </div>
           </div>
+
+          {formData.videoUrl && (
+            <div className="p-3 bg-gray-950/60 border border-purple-500/30 rounded-lg space-y-2">
+              <div className="flex items-center gap-2 text-xs font-semibold text-purple-300">
+                <Video size={14} />
+                <span>Video Preview</span>
+              </div>
+              <video
+                src={formData.videoUrl}
+                controls
+                className="w-full max-h-48 rounded-md bg-black object-contain"
+                onError={(e) => {
+                  e.target.style.display = 'none';
+                }}
+              />
+            </div>
+          )}
 
           <div>
             <label className="block text-sm font-medium text-gray-300 mb-1">

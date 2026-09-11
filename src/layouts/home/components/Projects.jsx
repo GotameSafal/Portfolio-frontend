@@ -2,7 +2,7 @@ import { getProjects } from "@/lib/api";
 import { useQuery } from "@tanstack/react-query";
 import { motion, AnimatePresence } from "framer-motion";
 import { get } from "lodash";
-import { ExternalLink, Github, MoveRight, X, ChevronRight, Cpu, Layers, Database, Globe, Filter } from "lucide-react";
+import { ExternalLink, Github, MoveRight, X, ChevronRight, Cpu, Layers, Database, Globe, Filter, Video, Play, Film } from "lucide-react";
 import { Suspense, useState, useMemo } from "react";
 
 // Fallback shown only if API fails — update with real projects
@@ -11,36 +11,39 @@ const fallbackProjects = [
     id: 1,
     title: "Smart Farm Management System",
     description:
-      "A comprehensive web-based SaaS solution for modern farm operations, tracking livestock, breeding, inventory, and financial reports.",
+      "Eliminates livestock financial opacity and feed waste with automated lineage tracking and batch profit/loss analytics.",
     detailedDescription:
-      "A precision digital farming platform that enables livestock batch management, breeding/lineage tracing with automated offspring tracking, real-time inventory alerts for feed & medicine, and batch-level profit & loss reports with dynamic multi-currency configurations.",
+      "PROBLEM SOLVED: Modern livestock farms frequently suffer from chaotic paper records, untracked breeding lineage, unmonitored feed/medicine inventory expiry, and an inability to calculate true profit per batch of animals.\n\nBUSINESS IMPACT & SOLUTION: Engineered an end-to-end digital precision farming platform. Features an automated breeding tracking engine with offspring batch generation, real-time stock decay/expiry alerts, and automated multi-currency Profit & Loss financial accounting per livestock batch.",
     technologies: ["React", "Next.js", "TypeScript", "Node.js", "Express.js", "MongoDB", "Tailwind CSS", "HeroUI"],
-    githubLink: "https://github.com/GotameSafal/Smart-Farm",
+    githubLink: "",
     liveLink: "#",
+    videoUrl: "https://res.cloudinary.com/dzat8mbl6/video/upload/v1789051798/merge_aqaom9.mp4",
     image: "https://images.unsplash.com/photo-1586771107445-d3ca888129ff?q=80&w=800&auto=format&fit=crop",
   },
   {
     id: 2,
-    title: "StreamVault (Media Harvest)",
+    title: "FieldOps Multi-Tenant Service Platform",
     description:
-      "A production-grade, privacy-focused media downloading ecosystem and local-first media toolkit powered by yt-dlp and FFmpeg.",
+      "Eliminates dispatch chaos, paper checklists, and billing delays for field service & workforce companies.",
     detailedDescription:
-      "A complete cross-platform ecosystem to download media from standard platforms. Features intelligent stream-copy video clipping, WebSocket-based live progress broadcasts, and a plugin/AI service layer. Includes a FastAPI server, a rich CLI, a Chrome Extension, and a Tauri desktop application.",
-    technologies: ["FastAPI", "Python", "SQLite", "React", "Tailwind CSS", "Tauri", "Chrome Extension API", "yt-dlp", "FFmpeg"],
-    githubLink: "https://github.com/GotameSafal/MediaHarvest",
-    liveLink: "#",
-    image: "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=800&auto=format&fit=crop",
+      "PROBLEM SOLVED: Service companies (HVAC, Solar, Plumbing, Electrical) lose thousands monthly due to manual job dispatching, unrecorded field parts, missing job signatures, and week-long delays in issuing customer invoices.\n\nBUSINESS IMPACT & SOLUTION: Built a full-stack multi-tenant workforce management platform. Connects office dispatchers with field technicians in real time. Features live Socket.IO technician dispatching, mobile site navigation, digital execution checklists, photo proof upload, customer e-signatures, and instant post-job invoicing.",
+    technologies: ["Next.js", "React Native", "Expo", "TypeScript", "Node.js", "Express", "Socket.IO", "Redis", "MongoDB"],
+    githubLink: "",
+    liveLink: "https://fieldops-art.vercel.app",
+    videoUrl: "",
+    image: "https://images.unsplash.com/photo-1581092160607-ee22621dd758?q=80&w=800&auto=format&fit=crop",
   },
   {
     id: 3,
-    title: "OmniNode IoT Platform",
+    title: "OmniNode IoT Platform (Mobile & Server)",
     description:
-      "A dual-component IoT platform featuring a React Native mobile dashboard and a high-performance Node.js server broker.",
+      "Prevents hardware downtime and manual sensor monitoring for distributed IoT devices and ESP32 hardware networks.",
     detailedDescription:
-      "A real-time IoT monitoring system. It combines 'iot-mobile' (a cross-platform React Native dashboard styled with Tamagui that displays live device telemetry, interactive graphs, and push notification thresholds) with 'iot-server' (a robust TypeScript Node.js backend acting as a gateway and API broker for device communication).",
+      "PROBLEM SOLVED: Managing remote IoT hardware and ESP32 microcontrollers requires reliable device monitoring, rapid telemetry ingestion, and instantaneous alert dispatching before catastrophic failures occur.\n\nBUSINESS IMPACT & SOLUTION: Architected a dual-component IoT hub combining 'iot-server' (a high-throughput TypeScript event gateway with rule automation engines and push dispatchers) and 'iot-mobile' (a Tamagui-styled React Native dashboard providing live device telemetry, threshold alerting, and device automation control).",
     technologies: ["React Native", "Expo", "Tamagui", "Node.js", "TypeScript", "Express", "WebSockets", "MQTT", "MongoDB"],
-    githubLink: "https://github.com/GotameSafal/OmniNode",
+    githubLink: "",
     liveLink: "#",
+    videoUrl: "https://res.cloudinary.com/dzat8mbl6/video/upload/v1789052206/omninode_squished_tg3thi.mp4",
     image: "https://images.unsplash.com/photo-1518770660439-4636190af475?q=80&w=800&auto=format&fit=crop",
   },
 ];
@@ -77,10 +80,10 @@ const ArchDiagram = ({ technologies = [] }) => {
   );
 };
 
-const CASE_STUDY_TABS = ["Overview", "Architecture", "Engineering"];
-
-export const ProjectModal = ({ project, onClose }) => {
-  const [activeTab, setActiveTab] = useState("Overview");
+export const ProjectModal = ({ project, initialTab = "Overview", onClose }) => {
+  const videoUrl = get(project, "videoUrl", project.videoUrl || "");
+  const tabs = videoUrl ? ["Overview", "Video Demo", "Architecture", "Engineering"] : ["Overview", "Architecture", "Engineering"];
+  const [activeTab, setActiveTab] = useState(initialTab === "Video Demo" && videoUrl ? "Video Demo" : "Overview");
   const liveLink = get(project, "liveLink", project.liveLink || "#");
   const githubLink = get(project, "githubLink", project.githubLink || "");
   const imgSrc = get(project, "imgUrl.url", project.image || "");
@@ -88,7 +91,7 @@ export const ProjectModal = ({ project, onClose }) => {
 
   return (
     <div
-      className="fixed inset-0 z-[99999] flex items-center justify-center p-4 backdrop-blur-md bg-black/60"
+      className="fixed inset-0 z-[99999] flex items-center justify-center p-4 backdrop-blur-md bg-black/70"
       onClick={onClose}
     >
       <motion.div
@@ -97,42 +100,52 @@ export const ProjectModal = ({ project, onClose }) => {
         exit={{ opacity: 0, scale: 0.9 }}
         transition={{ type: "spring", damping: 22 }}
         onClick={(e) => e.stopPropagation()}
-        className="relative w-full max-w-2xl max-h-[90vh] overflow-hidden rounded-2xl bg-gray-950 border border-white/10 shadow-2xl flex flex-col"
+        className="relative w-full max-w-2xl max-h-[90vh] overflow-hidden rounded-2xl bg-slate-950 border border-white/10 shadow-2xl flex flex-col"
       >
-        {/* Cover image */}
-        {imgSrc && (
-          <div className="relative h-48 shrink-0">
+        {/* Cover image / video banner */}
+        {imgSrc && activeTab !== "Video Demo" && (
+          <div className="relative h-48 shrink-0 overflow-hidden">
             <img src={imgSrc} alt={project.title} className="w-full h-full object-cover" />
-            <div className="absolute inset-0 bg-gradient-to-t from-gray-950 to-transparent" />
+            <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/40 to-transparent" />
           </div>
         )}
 
         {/* Close */}
         <button
           onClick={onClose}
-          className="absolute top-3 right-3 p-1.5 rounded-lg bg-gray-900/80 hover:bg-gray-800 text-gray-400 hover:text-white transition-colors"
+          className="absolute top-3 right-3 z-10 p-1.5 rounded-lg bg-slate-900/80 hover:bg-slate-800 text-gray-400 hover:text-white transition-colors cursor-pointer"
         >
           <X size={16} />
         </button>
 
         {/* Header */}
-        <div className="px-5 pt-3 pb-2 border-b border-gray-800 shrink-0">
-          <h3 className="text-xl font-bold text-white">{project.title}</h3>
-          <p className="text-sm text-gray-400 mt-0.5">{project.description}</p>
+        <div className="px-5 pt-4 pb-2 border-b border-white/10 shrink-0">
+          <div className="flex items-center gap-2">
+            <h3 className="text-xl font-bold text-white">{project.title}</h3>
+            {videoUrl && (
+              <span className="px-2 py-0.5 text-[10px] font-semibold bg-rose-500/20 text-rose-300 border border-rose-500/30 rounded-full flex items-center gap-1">
+                <Video size={10} /> Video Available
+              </span>
+            )}
+          </div>
+          <p className="text-xs sm:text-sm text-gray-400 mt-1">{project.description}</p>
         </div>
 
         {/* Tabs */}
-        <div className="flex gap-1 px-5 pt-3 shrink-0">
-          {CASE_STUDY_TABS.map((tab) => (
+        <div className="flex gap-1.5 px-5 pt-3 shrink-0 overflow-x-auto">
+          {tabs.map((tab) => (
             <button
               key={tab}
               onClick={() => setActiveTab(tab)}
-              className={`px-3 py-1 text-xs font-medium rounded-md transition-colors ${
+              className={`px-3 py-1.5 text-xs font-semibold rounded-lg transition-all cursor-pointer flex items-center gap-1.5 ${
                 activeTab === tab
-                  ? "bg-blue-600 text-white"
-                  : "text-gray-400 hover:text-white hover:bg-gray-800"
+                  ? tab === "Video Demo"
+                    ? "bg-rose-600 text-white shadow-lg shadow-rose-600/30"
+                    : "bg-blue-600 text-white shadow-lg shadow-blue-600/30"
+                  : "text-gray-400 hover:text-white hover:bg-slate-800/80"
               }`}
             >
+              {tab === "Video Demo" && <Play size={12} fill="currentColor" />}
               {tab}
             </button>
           ))}
@@ -144,16 +157,16 @@ export const ProjectModal = ({ project, onClose }) => {
             {activeTab === "Overview" && (
               <motion.div key="overview" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="space-y-4">
                 <div>
-                  <h4 className="text-xs font-semibold uppercase tracking-wider text-gray-500 mb-2">The Challenge</h4>
+                  <h4 className="text-xs font-semibold uppercase tracking-wider text-gray-500 mb-2">The Challenge & Solution</h4>
                   <p className="text-sm text-gray-300 leading-relaxed">
                     {project.detailedDescription || project.description}
                   </p>
                 </div>
                 <div>
-                  <h4 className="text-xs font-semibold uppercase tracking-wider text-gray-500 mb-2">Tech Stack</h4>
+                  <h4 className="text-xs font-semibold uppercase tracking-wider text-gray-500 mb-2">Technologies Used</h4>
                   <div className="flex flex-wrap gap-2">
                     {techs.map((tech, i) => (
-                      <span key={i} className="px-2.5 py-1 text-xs bg-gray-800 text-gray-200 rounded-full border border-gray-700">
+                      <span key={i} className="px-2.5 py-1 text-xs bg-slate-900 text-gray-200 rounded-lg border border-white/10">
                         {tech}
                       </span>
                     ))}
@@ -162,11 +175,42 @@ export const ProjectModal = ({ project, onClose }) => {
               </motion.div>
             )}
 
+            {activeTab === "Video Demo" && (
+              <motion.div key="video" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="space-y-3">
+                <h4 className="text-xs font-semibold uppercase tracking-wider text-rose-400 flex items-center gap-1.5">
+                  <Film size={14} /> Product Walkthrough & Video Showcase
+                </h4>
+                <div className="relative rounded-xl overflow-hidden bg-black border border-white/10 shadow-inner">
+                  <video
+                    src={videoUrl}
+                    controls
+                    autoPlay
+                    playsInline
+                    poster={imgSrc}
+                    className="w-full max-h-[340px] object-contain rounded-xl"
+                  >
+                    Your browser does not support HTML5 video playback.
+                  </video>
+                </div>
+                <div className="flex justify-between items-center text-xs text-gray-400">
+                  <span>Cloudinary / High-Quality Video Stream</span>
+                  <a
+                    href={videoUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-rose-400 hover:underline flex items-center gap-1 font-medium"
+                  >
+                    Open direct video URL <ExternalLink size={12} />
+                  </a>
+                </div>
+              </motion.div>
+            )}
+
             {activeTab === "Architecture" && (
               <motion.div key="arch" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="space-y-4">
                 <div>
                   <h4 className="text-xs font-semibold uppercase tracking-wider text-gray-500 mb-3">System Architecture</h4>
-                  <div className="p-4 rounded-xl bg-gray-900 border border-gray-800">
+                  <div className="p-4 rounded-xl bg-slate-900 border border-white/10">
                     <ArchDiagram technologies={techs} />
                   </div>
                 </div>
@@ -187,7 +231,7 @@ export const ProjectModal = ({ project, onClose }) => {
                       { title: "State Management", detail: "Used TanStack Query for server-state and React Context for lightweight auth state — avoiding Redux overhead." },
                       { title: "Performance", detail: "Implemented Suspense boundaries + lazy loading to reduce initial TTI and improve perceived performance." },
                     ].map((item, i) => (
-                      <li key={i} className="flex gap-2.5 p-3 bg-gray-900 rounded-lg border border-gray-800">
+                      <li key={i} className="flex gap-2.5 p-3 bg-slate-900 rounded-lg border border-white/10">
                         <ChevronRight size={14} className="text-blue-500 mt-0.5 shrink-0" />
                         <div>
                           <p className="text-xs font-semibold text-white">{item.title}</p>
@@ -203,12 +247,12 @@ export const ProjectModal = ({ project, onClose }) => {
         </div>
 
         {/* Footer CTA */}
-        <div className="flex gap-2 px-5 py-3 border-t border-gray-800 shrink-0">
+        <div className="flex gap-2 px-5 py-3 border-t border-white/10 shrink-0">
           <a
             href={liveLink}
             target="_blank"
             rel="noopener noreferrer"
-            className="flex items-center gap-1.5 px-4 py-2 text-sm bg-blue-600 hover:bg-blue-500 text-white rounded-lg transition-colors"
+            className="flex items-center gap-1.5 px-4 py-2 text-sm bg-blue-600 hover:bg-blue-500 text-white rounded-lg transition-colors font-medium cursor-pointer"
           >
             <ExternalLink size={14} />
             Live Demo
@@ -218,11 +262,20 @@ export const ProjectModal = ({ project, onClose }) => {
               href={githubLink}
               target="_blank"
               rel="noopener noreferrer"
-              className="flex items-center gap-1.5 px-4 py-2 text-sm bg-gray-800 hover:bg-gray-700 text-white rounded-lg transition-colors"
+              className="flex items-center gap-1.5 px-4 py-2 text-sm bg-slate-800 hover:bg-slate-700 text-white rounded-lg transition-colors font-medium cursor-pointer border border-white/10"
             >
               <Github size={14} />
               GitHub
             </a>
+          )}
+          {videoUrl && (
+            <button
+              onClick={() => setActiveTab("Video Demo")}
+              className="flex items-center gap-1.5 px-4 py-2 text-sm bg-rose-600/90 hover:bg-rose-500 text-white rounded-lg transition-colors font-medium cursor-pointer ml-auto"
+            >
+              <Play size={14} fill="currentColor" />
+              Watch Video
+            </button>
           )}
         </div>
       </motion.div>
@@ -233,7 +286,14 @@ export const ProjectModal = ({ project, onClose }) => {
 // Fixed Premium Card Component
 export const ProjectCard = ({ project }) => {
   const [visible, setVisible] = useState(false);
+  const [initialTab, setInitialTab] = useState("Overview");
   const previewImage = get(project, "imgUrl.url", project.image || "");
+  const videoUrl = get(project, "videoUrl", project.videoUrl || "");
+
+  const handleOpenModal = (tab = "Overview") => {
+    setInitialTab(tab);
+    setVisible(true);
+  };
 
   return (
     <>
@@ -255,22 +315,38 @@ export const ProjectCard = ({ project }) => {
               <Layers size={36} />
             </div>
           )}
-          <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 to-transparent" />
+          <div className="absolute inset-0 bg-gradient-to-t from-slate-950/90 via-slate-950/20 to-transparent" />
           
+          {videoUrl && (
+            <div className="absolute top-3 left-3 z-10">
+              <span className="px-2.5 py-1 text-[11px] font-semibold bg-rose-600/90 text-white backdrop-blur-md rounded-full shadow-lg flex items-center gap-1">
+                <Video size={12} /> Video Demo
+              </span>
+            </div>
+          )}
+
           {/* Quick link action overlay */}
-          <div className="absolute inset-0 bg-blue-950/80 backdrop-blur-xs flex items-center justify-center gap-3 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+          <div className="absolute inset-0 bg-slate-950/80 backdrop-blur-xs flex items-center justify-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
             <button
-              onClick={() => setVisible(true)}
-              className="flex items-center gap-1 px-3 py-1.5 bg-blue-600 text-white rounded-lg text-xs font-semibold hover:bg-blue-500 transition-colors"
+              onClick={() => handleOpenModal("Overview")}
+              className="flex items-center gap-1 px-3 py-1.5 bg-blue-600 text-white rounded-lg text-xs font-semibold hover:bg-blue-500 transition-colors cursor-pointer"
             >
               Learn More
             </button>
-            {get(project, "liveLink") && (
+            {videoUrl && (
+              <button
+                onClick={() => handleOpenModal("Video Demo")}
+                className="flex items-center gap-1 px-3 py-1.5 bg-rose-600 text-white rounded-lg text-xs font-semibold hover:bg-rose-500 transition-colors cursor-pointer"
+              >
+                <Play size={12} fill="currentColor" /> Watch Video
+              </button>
+            )}
+            {get(project, "liveLink") && project.liveLink !== "#" && (
               <a
                 href={project.liveLink}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="p-1.5 bg-gray-800 text-white rounded-lg hover:bg-gray-700 transition-colors"
+                className="p-1.5 bg-gray-800 text-white rounded-lg hover:bg-gray-700 transition-colors cursor-pointer"
               >
                 <ExternalLink size={14} />
               </a>
@@ -310,7 +386,7 @@ export const ProjectCard = ({ project }) => {
 
       <AnimatePresence>
         {visible && (
-          <ProjectModal project={project} onClose={() => setVisible(false)} />
+          <ProjectModal project={project} initialTab={initialTab} onClose={() => setVisible(false)} />
         )}
       </AnimatePresence>
     </>
