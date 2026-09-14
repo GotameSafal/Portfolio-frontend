@@ -2,10 +2,25 @@ import { getProjects } from "@/lib/api";
 import { useQuery } from "@tanstack/react-query";
 import { motion, AnimatePresence } from "framer-motion";
 import { get } from "lodash";
-import { ExternalLink, Github, MoveRight, X, ChevronRight, Cpu, Layers, Database, Globe, Filter, Video, Play, Film } from "lucide-react";
-import { Suspense, useState, useMemo } from "react";
+import {
+  ExternalLink,
+  Github,
+  X,
+  ChevronRight,
+  Cpu,
+  Layers,
+  Database,
+  Globe,
+  Video,
+  Play,
+  Film,
+  Sparkles,
+  ArrowUpRight,
+  Code2,
+} from "lucide-react";
+import { useState, useMemo } from "react";
 
-// Fallback shown only if API fails — update with real projects
+// Fallback shown only if API fails — high quality technical projects
 const fallbackProjects = [
   {
     id: 1,
@@ -14,7 +29,7 @@ const fallbackProjects = [
       "Eliminates livestock financial opacity and feed waste with automated lineage tracking and batch profit/loss analytics.",
     detailedDescription:
       "PROBLEM SOLVED: Modern livestock farms frequently suffer from chaotic paper records, untracked breeding lineage, unmonitored feed/medicine inventory expiry, and an inability to calculate true profit per batch of animals.\n\nBUSINESS IMPACT & SOLUTION: Engineered an end-to-end digital precision farming platform. Features an automated breeding tracking engine with offspring batch generation, real-time stock decay/expiry alerts, and automated multi-currency Profit & Loss financial accounting per livestock batch.",
-    technologies: ["React", "Next.js", "TypeScript", "Node.js", "Express.js", "MongoDB", "Tailwind CSS", "HeroUI"],
+    technologies: ["React", "Next.js", "TypeScript", "Node.js", "Express.js", "MongoDB", "Tailwind CSS"],
     githubLink: "",
     liveLink: "#",
     videoUrl: "https://res.cloudinary.com/dzat8mbl6/video/upload/v1789051798/merge_aqaom9.mp4",
@@ -40,7 +55,7 @@ const fallbackProjects = [
       "Prevents hardware downtime and manual sensor monitoring for distributed IoT devices and ESP32 hardware networks.",
     detailedDescription:
       "PROBLEM SOLVED: Managing remote IoT hardware and ESP32 microcontrollers requires reliable device monitoring, rapid telemetry ingestion, and instantaneous alert dispatching before catastrophic failures occur.\n\nBUSINESS IMPACT & SOLUTION: Architected a dual-component IoT hub combining 'iot-server' (a high-throughput TypeScript event gateway with rule automation engines and push dispatchers) and 'iot-mobile' (a Tamagui-styled React Native dashboard providing live device telemetry, threshold alerting, and device automation control).",
-    technologies: ["React Native", "Expo", "Tamagui", "Node.js", "TypeScript", "Express", "WebSockets", "MQTT", "MongoDB"],
+    technologies: ["React Native", "Expo", "TypeScript", "Node.js", "Express", "WebSockets", "MQTT", "MongoDB"],
     githubLink: "",
     liveLink: "#",
     videoUrl: "https://res.cloudinary.com/dzat8mbl6/video/upload/v1789052206/omninode_squished_tg3thi.mp4",
@@ -48,11 +63,10 @@ const fallbackProjects = [
   },
 ];
 
-
 // Reusable architecture node block
 const ArchNode = ({ icon: Icon, label, colorClass }) => (
-  <div className={`flex flex-col items-center gap-1 px-3 py-2 rounded-lg border text-xs font-medium ${colorClass}`}>
-    <Icon size={14} />
+  <div className={`flex flex-col items-center gap-1.5 px-3 py-2 rounded-xl border text-xs font-medium ${colorClass}`}>
+    <Icon size={16} />
     <span>{label}</span>
   </div>
 );
@@ -60,19 +74,19 @@ const ArchNode = ({ icon: Icon, label, colorClass }) => (
 // Architecture diagram component
 const ArchDiagram = ({ technologies = [] }) => {
   const layers = [
-    { icon: Globe, label: "Frontend", colorClass: "bg-blue-900/40 border-blue-500/40 text-blue-300" },
-    { icon: Cpu, label: technologies.includes("Node.js") ? "Node.js API" : "REST API", colorClass: "bg-green-900/40 border-green-500/40 text-green-300" },
-    { icon: Database, label: technologies.find(t => ["MongoDB","PostgreSQL","MySQL"].includes(t)) || "Database", colorClass: "bg-orange-900/40 border-orange-500/40 text-orange-300" },
-    { icon: Layers, label: "Deployment", colorClass: "bg-purple-900/40 border-purple-500/40 text-purple-300" },
+    { icon: Globe, label: "Client Layer", colorClass: "bg-blue-500/10 border-blue-500/30 text-blue-300" },
+    { icon: Cpu, label: technologies.includes("Node.js") ? "Node.js API" : "Backend Services", colorClass: "bg-emerald-500/10 border-emerald-500/30 text-emerald-300" },
+    { icon: Database, label: technologies.find((t) => ["MongoDB", "PostgreSQL", "Redis"].includes(t)) || "Database & Cache", colorClass: "bg-amber-500/10 border-amber-500/30 text-amber-300" },
+    { icon: Layers, label: "Cloud & CDN", colorClass: "bg-purple-500/10 border-purple-500/30 text-purple-300" },
   ];
 
   return (
-    <div className="flex items-center gap-1 flex-wrap">
+    <div className="flex items-center gap-2 flex-wrap">
       {layers.map((node, i) => (
-        <div key={i} className="flex items-center gap-1">
+        <div key={i} className="flex items-center gap-2">
           <ArchNode {...node} />
           {i < layers.length - 1 && (
-            <ChevronRight size={12} className="text-gray-600 shrink-0" />
+            <ChevronRight size={14} className="text-neutral-600 shrink-0" />
           )}
         </div>
       ))}
@@ -80,10 +94,15 @@ const ArchDiagram = ({ technologies = [] }) => {
   );
 };
 
+// ── Project Modal Component ──────────────────────────────────────────────────
 export const ProjectModal = ({ project, initialTab = "Overview", onClose }) => {
   const videoUrl = get(project, "videoUrl", project.videoUrl || "");
-  const tabs = videoUrl ? ["Overview", "Video Demo", "Architecture", "Engineering"] : ["Overview", "Architecture", "Engineering"];
-  const [activeTab, setActiveTab] = useState(initialTab === "Video Demo" && videoUrl ? "Video Demo" : "Overview");
+  const tabs = videoUrl
+    ? ["Overview", "Video Demo", "Architecture", "Engineering"]
+    : ["Overview", "Architecture", "Engineering"];
+  const [activeTab, setActiveTab] = useState(
+    initialTab === "Video Demo" && videoUrl ? "Video Demo" : "Overview"
+  );
   const liveLink = get(project, "liveLink", project.liveLink || "#");
   const githubLink = get(project, "githubLink", project.githubLink || "");
   const imgSrc = get(project, "imgUrl.url", project.image || "");
@@ -91,58 +110,63 @@ export const ProjectModal = ({ project, initialTab = "Overview", onClose }) => {
 
   return (
     <div
-      className="fixed inset-0 z-[99999] flex items-center justify-center p-4 backdrop-blur-md bg-black/70"
+      className="fixed inset-0 z-[99999] flex items-center justify-center p-4 backdrop-blur-md bg-black/80"
       onClick={onClose}
     >
       <motion.div
-        initial={{ opacity: 0, scale: 0.9, y: 30 }}
+        initial={{ opacity: 0, scale: 0.95, y: 20 }}
         animate={{ opacity: 1, scale: 1, y: 0 }}
-        exit={{ opacity: 0, scale: 0.9 }}
-        transition={{ type: "spring", damping: 22 }}
+        exit={{ opacity: 0, scale: 0.95, y: 20 }}
+        transition={{ type: "spring", damping: 25, stiffness: 280 }}
         onClick={(e) => e.stopPropagation()}
-        className="relative w-full max-w-2xl max-h-[90vh] overflow-hidden rounded-2xl bg-slate-950 border border-white/10 shadow-2xl flex flex-col"
+        className="relative w-full max-w-2xl max-h-[90vh] overflow-hidden rounded-2xl bg-neutral-950 border border-neutral-800 shadow-2xl flex flex-col"
       >
-        {/* Cover image / video banner */}
+        {/* Cover image banner */}
         {imgSrc && activeTab !== "Video Demo" && (
-          <div className="relative h-48 shrink-0 overflow-hidden">
+          <div className="relative h-44 sm:h-52 shrink-0 overflow-hidden bg-neutral-900">
             <img src={imgSrc} alt={project.title} className="w-full h-full object-cover" />
-            <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/40 to-transparent" />
+            <div className="absolute inset-0 bg-gradient-to-t from-neutral-950 via-neutral-950/40 to-transparent" />
           </div>
         )}
 
-        {/* Close */}
+        {/* Close Button */}
         <button
           onClick={onClose}
-          className="absolute top-3 right-3 z-10 p-1.5 rounded-lg bg-slate-900/80 hover:bg-slate-800 text-gray-400 hover:text-white transition-colors cursor-pointer"
+          className="absolute top-3.5 right-3.5 z-20 p-2 rounded-xl bg-neutral-900/80 hover:bg-neutral-800 text-neutral-400 hover:text-white transition-colors cursor-pointer border border-neutral-700/60"
+          aria-label="Close modal"
         >
           <X size={16} />
         </button>
 
         {/* Header */}
-        <div className="px-5 pt-4 pb-2 border-b border-white/10 shrink-0">
-          <div className="flex items-center gap-2">
-            <h3 className="text-xl font-bold text-white">{project.title}</h3>
+        <div className="px-6 pt-5 pb-3 border-b border-neutral-800/80 shrink-0">
+          <div className="flex flex-wrap items-center gap-2">
+            <h3 className="text-xl sm:text-2xl font-bold tracking-tight text-white">
+              {project.title}
+            </h3>
             {videoUrl && (
-              <span className="px-2 py-0.5 text-[10px] font-semibold bg-rose-500/20 text-rose-300 border border-rose-500/30 rounded-full flex items-center gap-1">
-                <Video size={10} /> Video Available
+              <span className="px-2.5 py-0.5 text-xs font-semibold bg-rose-500/10 text-rose-400 border border-rose-500/20 rounded-full flex items-center gap-1.5">
+                <Video size={12} /> Walkthrough
               </span>
             )}
           </div>
-          <p className="text-xs sm:text-sm text-gray-400 mt-1">{project.description}</p>
+          <p className="text-xs sm:text-sm text-neutral-400 mt-1.5 line-clamp-2">
+            {project.description}
+          </p>
         </div>
 
         {/* Tabs */}
-        <div className="flex gap-1.5 px-5 pt-3 shrink-0 overflow-x-auto">
+        <div className="flex gap-2 px-6 pt-3 shrink-0 overflow-x-auto border-b border-neutral-900 pb-2">
           {tabs.map((tab) => (
             <button
               key={tab}
               onClick={() => setActiveTab(tab)}
-              className={`px-3 py-1.5 text-xs font-semibold rounded-lg transition-all cursor-pointer flex items-center gap-1.5 ${
+              className={`px-3.5 py-1.5 text-xs font-semibold rounded-lg transition-all cursor-pointer flex items-center gap-1.5 shrink-0 ${
                 activeTab === tab
                   ? tab === "Video Demo"
-                    ? "bg-rose-600 text-white shadow-lg shadow-rose-600/30"
-                    : "bg-blue-600 text-white shadow-lg shadow-blue-600/30"
-                  : "text-gray-400 hover:text-white hover:bg-slate-800/80"
+                    ? "bg-rose-600 text-white shadow-lg shadow-rose-600/20"
+                    : "bg-blue-600 text-white shadow-lg shadow-blue-600/20"
+                  : "text-neutral-400 hover:text-white hover:bg-neutral-900 border border-transparent"
               }`}
             >
               {tab === "Video Demo" && <Play size={12} fill="currentColor" />}
@@ -151,22 +175,35 @@ export const ProjectModal = ({ project, initialTab = "Overview", onClose }) => {
           ))}
         </div>
 
-        {/* Tab body */}
-        <div className="flex-1 overflow-y-auto px-5 py-4 space-y-4">
+        {/* Tab Body */}
+        <div className="flex-1 overflow-y-auto px-6 py-4 space-y-4">
           <AnimatePresence mode="wait">
             {activeTab === "Overview" && (
-              <motion.div key="overview" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="space-y-4">
+              <motion.div
+                key="overview"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                className="space-y-4"
+              >
                 <div>
-                  <h4 className="text-xs font-semibold uppercase tracking-wider text-gray-500 mb-2">The Challenge & Solution</h4>
-                  <p className="text-sm text-gray-300 leading-relaxed">
+                  <h4 className="text-xs font-semibold uppercase tracking-wider text-neutral-500 mb-2">
+                    Case Study & Solution
+                  </h4>
+                  <p className="text-sm text-neutral-300 leading-relaxed whitespace-pre-line">
                     {project.detailedDescription || project.description}
                   </p>
                 </div>
                 <div>
-                  <h4 className="text-xs font-semibold uppercase tracking-wider text-gray-500 mb-2">Technologies Used</h4>
-                  <div className="flex flex-wrap gap-2">
+                  <h4 className="text-xs font-semibold uppercase tracking-wider text-neutral-500 mb-2.5">
+                    Technologies & Libraries
+                  </h4>
+                  <div className="flex flex-wrap gap-1.5">
                     {techs.map((tech, i) => (
-                      <span key={i} className="px-2.5 py-1 text-xs bg-slate-900 text-gray-200 rounded-lg border border-white/10">
+                      <span
+                        key={i}
+                        className="px-2.5 py-1 text-xs bg-neutral-900 text-neutral-300 rounded-lg border border-neutral-800 font-medium"
+                      >
                         {tech}
                       </span>
                     ))}
@@ -176,11 +213,20 @@ export const ProjectModal = ({ project, initialTab = "Overview", onClose }) => {
             )}
 
             {activeTab === "Video Demo" && (
-              <motion.div key="video" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="space-y-3">
-                <h4 className="text-xs font-semibold uppercase tracking-wider text-rose-400 flex items-center gap-1.5">
-                  <Film size={14} /> Product Walkthrough & Video Showcase
-                </h4>
-                <div className="relative rounded-xl overflow-hidden bg-black border border-white/10 shadow-inner">
+              <motion.div
+                key="video"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                className="space-y-3"
+              >
+                <div className="flex items-center justify-between">
+                  <h4 className="text-xs font-semibold uppercase tracking-wider text-rose-400 flex items-center gap-1.5">
+                    <Film size={14} /> Product Demonstration Video
+                  </h4>
+                  <span className="text-xs text-neutral-500">Cloudinary Stream</span>
+                </div>
+                <div className="relative rounded-xl overflow-hidden bg-black border border-neutral-800 shadow-inner">
                   <video
                     src={videoUrl}
                     controls
@@ -192,88 +238,110 @@ export const ProjectModal = ({ project, initialTab = "Overview", onClose }) => {
                     Your browser does not support HTML5 video playback.
                   </video>
                 </div>
-                <div className="flex justify-between items-center text-xs text-gray-400">
-                  <span>Cloudinary / High-Quality Video Stream</span>
-                  <a
-                    href={videoUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-rose-400 hover:underline flex items-center gap-1 font-medium"
-                  >
-                    Open direct video URL <ExternalLink size={12} />
-                  </a>
-                </div>
               </motion.div>
             )}
 
             {activeTab === "Architecture" && (
-              <motion.div key="arch" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="space-y-4">
+              <motion.div
+                key="arch"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                className="space-y-4"
+              >
                 <div>
-                  <h4 className="text-xs font-semibold uppercase tracking-wider text-gray-500 mb-3">System Architecture</h4>
-                  <div className="p-4 rounded-xl bg-slate-900 border border-white/10">
+                  <h4 className="text-xs font-semibold uppercase tracking-wider text-neutral-500 mb-3">
+                    System Architecture Overview
+                  </h4>
+                  <div className="p-4 rounded-xl bg-neutral-900/80 border border-neutral-800">
                     <ArchDiagram technologies={techs} />
                   </div>
                 </div>
-                <div className="p-3 rounded-lg bg-blue-950/30 border border-blue-800/30 text-xs text-blue-200 leading-relaxed">
-                  <span className="font-semibold text-blue-400">Flow:</span>{" "}
-                  Client sends requests via HTTPS → REST API layer validates & processes → Data persisted in DB → CDN-cached responses returned to client.
+                <div className="p-3.5 rounded-xl bg-blue-500/10 border border-blue-500/20 text-xs text-blue-200 leading-relaxed">
+                  <span className="font-semibold text-blue-400">Data Pipeline:</span>{" "}
+                  Client triggers UI dispatch → Authenticated REST/WebSocket API router → Service business logic & validation layer → Persistent storage with indexed querying → Real-time response hydration.
                 </div>
               </motion.div>
             )}
 
             {activeTab === "Engineering" && (
-              <motion.div key="eng" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="space-y-4">
-                <div>
-                  <h4 className="text-xs font-semibold uppercase tracking-wider text-gray-500 mb-2">Key Technical Decisions</h4>
-                  <ul className="space-y-2.5">
-                    {[
-                      { title: "Component Architecture", detail: "Adopted feature-first folder structure to maintain high cohesion and low coupling between modules." },
-                      { title: "State Management", detail: "Used TanStack Query for server-state and React Context for lightweight auth state — avoiding Redux overhead." },
-                      { title: "Performance", detail: "Implemented Suspense boundaries + lazy loading to reduce initial TTI and improve perceived performance." },
-                    ].map((item, i) => (
-                      <li key={i} className="flex gap-2.5 p-3 bg-slate-900 rounded-lg border border-white/10">
-                        <ChevronRight size={14} className="text-blue-500 mt-0.5 shrink-0" />
-                        <div>
-                          <p className="text-xs font-semibold text-white">{item.title}</p>
-                          <p className="text-xs text-gray-400 mt-0.5">{item.detail}</p>
-                        </div>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
+              <motion.div
+                key="eng"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                className="space-y-4"
+              >
+                <h4 className="text-xs font-semibold uppercase tracking-wider text-neutral-500 mb-2">
+                  Key Technical Decisions
+                </h4>
+                <ul className="space-y-2.5">
+                  {[
+                    {
+                      title: "Component Modularity",
+                      detail:
+                        "Structured around domain-driven feature folders for clear separation of concerns, loose coupling, and rapid scaling.",
+                    },
+                    {
+                      title: "State & Query Caching",
+                      detail:
+                        "Leveraged TanStack Query for server state caching and optimistic UI updates, keeping the bundle lightweight.",
+                    },
+                    {
+                      title: "Performance & Responsive UX",
+                      detail:
+                        "Configured code-split vendor chunking and image lazy-loading to optimize Core Web Vitals.",
+                    },
+                  ].map((item, i) => (
+                    <li
+                      key={i}
+                      className="flex gap-3 p-3 bg-neutral-900/70 rounded-xl border border-neutral-800"
+                    >
+                      <ChevronRight size={14} className="text-blue-400 mt-0.5 shrink-0" />
+                      <div>
+                        <p className="text-xs font-semibold text-white">{item.title}</p>
+                        <p className="text-xs text-neutral-400 mt-0.5 leading-relaxed">
+                          {item.detail}
+                        </p>
+                      </div>
+                    </li>
+                  ))}
+                </ul>
               </motion.div>
             )}
           </AnimatePresence>
         </div>
 
-        {/* Footer CTA */}
-        <div className="flex gap-2 px-5 py-3 border-t border-white/10 shrink-0">
-          <a
-            href={liveLink}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="flex items-center gap-1.5 px-4 py-2 text-sm bg-blue-600 hover:bg-blue-500 text-white rounded-lg transition-colors font-medium cursor-pointer"
-          >
-            <ExternalLink size={14} />
-            Live Demo
-          </a>
+        {/* Footer Actions */}
+        <div className="flex flex-wrap items-center gap-2.5 px-6 py-3.5 border-t border-neutral-800/80 bg-neutral-950 shrink-0">
+          {liveLink && liveLink !== "#" && (
+            <a
+              href={liveLink}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-1.5 px-4 py-2 text-xs font-semibold bg-blue-600 hover:bg-blue-500 text-white rounded-xl transition-all shadow-lg shadow-blue-600/20 cursor-pointer"
+            >
+              <ExternalLink size={13} />
+              Visit Live App
+            </a>
+          )}
           {githubLink && githubLink.trim() !== "" && (
             <a
               href={githubLink}
               target="_blank"
               rel="noopener noreferrer"
-              className="flex items-center gap-1.5 px-4 py-2 text-sm bg-slate-800 hover:bg-slate-700 text-white rounded-lg transition-colors font-medium cursor-pointer border border-white/10"
+              className="inline-flex items-center gap-1.5 px-3.5 py-2 text-xs font-semibold bg-neutral-900 hover:bg-neutral-800 text-neutral-300 hover:text-white rounded-xl transition-colors cursor-pointer border border-neutral-800"
             >
-              <Github size={14} />
-              GitHub
+              <Github size={13} />
+              Source Code
             </a>
           )}
-          {videoUrl && (
+          {videoUrl && activeTab !== "Video Demo" && (
             <button
               onClick={() => setActiveTab("Video Demo")}
-              className="flex items-center gap-1.5 px-4 py-2 text-sm bg-rose-600/90 hover:bg-rose-500 text-white rounded-lg transition-colors font-medium cursor-pointer ml-auto"
+              className="inline-flex items-center gap-1.5 px-3.5 py-2 text-xs font-semibold bg-rose-500/10 hover:bg-rose-500/20 text-rose-300 rounded-xl transition-colors cursor-pointer ml-auto border border-rose-500/20"
             >
-              <Play size={14} fill="currentColor" />
+              <Play size={12} fill="currentColor" />
               Watch Video
             </button>
           )}
@@ -283,12 +351,14 @@ export const ProjectModal = ({ project, initialTab = "Overview", onClose }) => {
   );
 };
 
-// Fixed Premium Card Component
+// ── Bento-Style Project Card ─────────────────────────────────────────────────
 export const ProjectCard = ({ project }) => {
   const [visible, setVisible] = useState(false);
   const [initialTab, setInitialTab] = useState("Overview");
   const previewImage = get(project, "imgUrl.url", project.image || "");
   const videoUrl = get(project, "videoUrl", project.videoUrl || "");
+  const liveLink = get(project, "liveLink", project.liveLink || "");
+  const githubLink = get(project, "githubLink", project.githubLink || "");
 
   const handleOpenModal = (tab = "Overview") => {
     setInitialTab(tab);
@@ -297,104 +367,129 @@ export const ProjectCard = ({ project }) => {
 
   return (
     <>
-      <motion.div
-        whileHover={{ y: -6 }}
-        transition={{ type: "spring", stiffness: 300, damping: 20 }}
-        className="group flex flex-col h-full bg-slate-900/60 rounded-2xl border border-white/5 overflow-hidden shadow-xl"
-      >
-        {/* Card Image Cover with Hover Effect */}
-        <div className="relative h-48 overflow-hidden bg-slate-950 shrink-0">
+      <div className="group relative flex flex-col h-full rounded-2xl bg-neutral-900/60 border border-neutral-800/80 hover:border-neutral-700/80 backdrop-blur-md overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300">
+        {/* Media Preview Container */}
+        <div className="relative h-48 sm:h-52 overflow-hidden bg-neutral-950 shrink-0">
           {previewImage ? (
             <img
               src={previewImage}
               alt={project.title}
-              className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+              loading="lazy"
+              className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
             />
           ) : (
-            <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-blue-900/20 to-slate-900 text-gray-600">
+            <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-blue-950/20 to-neutral-950 text-neutral-600">
               <Layers size={36} />
             </div>
           )}
-          <div className="absolute inset-0 bg-gradient-to-t from-slate-950/90 via-slate-950/20 to-transparent" />
-          
-          {videoUrl && (
-            <div className="absolute top-3 left-3 z-10">
-              <span className="px-2.5 py-1 text-[11px] font-semibold bg-rose-600/90 text-white backdrop-blur-md rounded-full shadow-lg flex items-center gap-1">
-                <Video size={12} /> Video Demo
-              </span>
-            </div>
-          )}
 
-          {/* Quick link action overlay */}
-          <div className="absolute inset-0 bg-slate-950/80 backdrop-blur-xs flex items-center justify-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+          {/* Top Badges */}
+          <div className="absolute top-3 left-3 right-3 flex items-center justify-between pointer-events-none z-10">
+            {videoUrl ? (
+              <span className="inline-flex items-center gap-1 px-2.5 py-1 text-[11px] font-semibold bg-neutral-950/80 text-rose-400 backdrop-blur-md rounded-full border border-rose-500/30">
+                <span className="w-1.5 h-1.5 rounded-full bg-rose-500 animate-pulse" />
+                Video Demo
+              </span>
+            ) : <div />}
+
             <button
               onClick={() => handleOpenModal("Overview")}
-              className="flex items-center gap-1 px-3 py-1.5 bg-blue-600 text-white rounded-lg text-xs font-semibold hover:bg-blue-500 transition-colors cursor-pointer"
+              className="pointer-events-auto p-1.5 rounded-xl bg-neutral-950/80 hover:bg-blue-600 text-neutral-300 hover:text-white backdrop-blur-md border border-neutral-800 transition-colors cursor-pointer"
+              title="Expand Details"
             >
-              Learn More
+              <ArrowUpRight size={15} />
             </button>
-            {videoUrl && (
-              <button
-                onClick={() => handleOpenModal("Video Demo")}
-                className="flex items-center gap-1 px-3 py-1.5 bg-rose-600 text-white rounded-lg text-xs font-semibold hover:bg-rose-500 transition-colors cursor-pointer"
-              >
-                <Play size={12} fill="currentColor" /> Watch Video
-              </button>
-            )}
-            {get(project, "liveLink") && project.liveLink !== "#" && (
-              <a
-                href={project.liveLink}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="p-1.5 bg-gray-800 text-white rounded-lg hover:bg-gray-700 transition-colors cursor-pointer"
-              >
-                <ExternalLink size={14} />
-              </a>
-            )}
           </div>
+
+          <div className="absolute inset-0 bg-gradient-to-t from-neutral-950/90 via-neutral-950/20 to-transparent" />
         </div>
 
-        {/* Card Body */}
+        {/* Card Content */}
         <div className="flex-1 p-5 flex flex-col justify-between">
-          <div className="space-y-2">
-            <h3 className="font-bold text-lg text-white group-hover:text-blue-400 transition-colors">
+          <div>
+            <h3
+              onClick={() => handleOpenModal("Overview")}
+              className="font-bold text-lg text-white group-hover:text-blue-400 transition-colors cursor-pointer line-clamp-1"
+            >
               {project.title}
             </h3>
-            <p className="text-gray-400 text-xs line-clamp-3 leading-relaxed">
+            <p className="text-neutral-400 text-xs mt-2 line-clamp-2 leading-relaxed">
               {project.description}
             </p>
           </div>
 
-          <div className="mt-4 pt-3 border-t border-white/5 flex flex-wrap gap-1.5">
-            {project.technologies &&
-              project.technologies.slice(0, 3).map((tech, index) => (
-                <span
-                  key={index}
-                  className="px-2 py-0.5 bg-gray-800 text-[10px] text-gray-300 rounded-full border border-gray-700/60"
-                >
-                  {tech}
+          {/* Tech Stack Chips */}
+          <div className="mt-4 pt-3 border-t border-neutral-800/60">
+            <div className="flex flex-wrap gap-1.5 mb-4">
+              {project.technologies &&
+                project.technologies.slice(0, 4).map((tech, index) => (
+                  <span
+                    key={index}
+                    className="px-2 py-0.5 bg-neutral-800/80 text-[11px] font-medium text-neutral-300 rounded-md border border-neutral-700/60"
+                  >
+                    {tech}
+                  </span>
+                ))}
+              {project.technologies && project.technologies.length > 4 && (
+                <span className="px-1.5 py-0.5 text-[10px] text-neutral-500 self-center">
+                  +{project.technologies.length - 4} more
                 </span>
-              ))}
-            {project.technologies && project.technologies.length > 3 && (
-              <span className="text-[10px] text-gray-500 self-center">
-                +{project.technologies.length - 3} more
-              </span>
-            )}
+              )}
+            </div>
+
+            {/* Direct Action Buttons (No hover dependency) */}
+            <div className="flex items-center gap-2">
+              <button
+                onClick={() => handleOpenModal("Overview")}
+                className="flex-1 inline-flex items-center justify-center gap-1.5 py-2 px-3 rounded-xl bg-neutral-800 hover:bg-neutral-700 text-white text-xs font-semibold transition-colors cursor-pointer border border-neutral-700/60"
+              >
+                <Code2 size={13} />
+                Case Study
+              </button>
+
+              {liveLink && liveLink !== "#" && (
+                <a
+                  href={liveLink}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center justify-center p-2 rounded-xl bg-blue-600 hover:bg-blue-500 text-white text-xs font-semibold transition-colors cursor-pointer"
+                  title="Live Demo"
+                >
+                  <ExternalLink size={14} />
+                </a>
+              )}
+
+              {githubLink && githubLink.trim() !== "" && (
+                <a
+                  href={githubLink}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center justify-center p-2 rounded-xl bg-neutral-800 hover:bg-neutral-700 text-neutral-300 hover:text-white text-xs font-semibold transition-colors cursor-pointer border border-neutral-700/60"
+                  title="GitHub Repository"
+                >
+                  <Github size={14} />
+                </a>
+              )}
+            </div>
           </div>
         </div>
-      </motion.div>
+      </div>
 
       <AnimatePresence>
         {visible && (
-          <ProjectModal project={project} initialTab={initialTab} onClose={() => setVisible(false)} />
+          <ProjectModal
+            project={project}
+            initialTab={initialTab}
+            onClose={() => setVisible(false)}
+          />
         )}
       </AnimatePresence>
     </>
   );
 };
 
-// Component to fetch, filter and display projects
-const ProjectsData = ({ filter }) => {
+// ── Projects Data & Filtering ────────────────────────────────────────────────
+const ProjectsData = ({ filter, onFilterCategoriesChange }) => {
   const { data, isLoading, isError } = useQuery({
     queryKey: ["projects"],
     queryFn: getProjects,
@@ -407,7 +502,6 @@ const ProjectsData = ({ filter }) => {
       ? get(data, "projects", [])
       : fallbackProjects;
 
-  // useMemo MUST be before any early return — Rules of Hooks
   const filteredProjects = useMemo(() => {
     if (filter === "All") return projects;
     return projects.filter((project) =>
@@ -423,24 +517,21 @@ const ProjectsData = ({ filter }) => {
 
   if (filteredProjects.length === 0) {
     return (
-      <div className="col-span-full py-16 text-center text-gray-500">
-        No projects found matching the filter "{filter}".
+      <div className="col-span-full py-16 text-center text-neutral-500">
+        No projects found for category "{filter}".
       </div>
     );
   }
 
   return (
-    <motion.div
-      layout
-      className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"
-    >
+    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
       <AnimatePresence mode="popLayout">
         {filteredProjects.map((project) => (
           <motion.div
             layout
             initial={{ opacity: 0, y: 15 }}
             animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, scale: 0.9 }}
+            exit={{ opacity: 0, scale: 0.95 }}
             transition={{ duration: 0.3 }}
             key={project._id || project.id}
           >
@@ -448,90 +539,82 @@ const ProjectsData = ({ filter }) => {
           </motion.div>
         ))}
       </AnimatePresence>
-    </motion.div>
+    </div>
   );
 };
 
-// Loading fallback component
+// Skeleton loader
 const ProjectsLoading = () => (
   <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
     {[1, 2, 3].map((n) => (
-      <div key={n} className="h-[320px] rounded-2xl bg-slate-900/40 border border-white/5 animate-pulse flex flex-col p-5 justify-between">
-        <div className="h-40 rounded-xl bg-slate-800" />
+      <div
+        key={n}
+        className="h-[360px] rounded-2xl bg-neutral-900/40 border border-neutral-800 animate-pulse flex flex-col p-5 justify-between"
+      >
+        <div className="h-44 rounded-xl bg-neutral-800" />
         <div className="space-y-2 mt-4">
-          <div className="h-4 w-2/3 bg-slate-800 rounded" />
-          <div className="h-3 w-full bg-slate-800 rounded" />
+          <div className="h-4 w-2/3 bg-neutral-800 rounded" />
+          <div className="h-3 w-full bg-neutral-800 rounded" />
         </div>
-        <div className="h-6 w-1/3 bg-slate-800 rounded mt-4" />
+        <div className="h-8 w-full bg-neutral-800 rounded mt-4" />
       </div>
     ))}
   </div>
 );
 
-// Main ProjectSection component
+// ── Main Section ─────────────────────────────────────────────────────────────
 const ProjectSection = () => {
   const [filter, setFilter] = useState("All");
 
-  const categories = ["All", "React", "Node.js", "Python", "TypeScript", "IoT"];
-
-
+  const categories = [
+    { label: "All" },
+    { label: "React" },
+    { label: "Next.js" },
+    { label: "TypeScript" },
+    { label: "Node.js" },
+    { label: "React Native" },
+  ];
 
   return (
     <section
       id="projects"
-      className="relative h-auto bg-transparent text-white py-12 sm:py-16"
+      className="relative bg-transparent text-white py-16 sm:py-20"
     >
-      <div className="max-w-screen-lg relative h-full mx-auto px-4 sm:px-6">
-        <motion.div
-          initial={{ opacity: 0, y: -20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
-          className="mb-8 sm:mb-12 flex flex-col md:flex-row md:items-end md:justify-between gap-6"
-        >
+      <div className="max-w-screen-xl relative h-full mx-auto px-4 sm:px-6 md:px-8">
+        <div className="mb-12 flex flex-col md:flex-row md:items-end md:justify-between gap-6">
           <div>
-            <motion.h2
-              className="text-2xl sm:text-3xl md:text-4xl font-bold mb-3 sm:mb-4 relative inline-block animate-gradient"
-              initial={{ opacity: 0, y: -20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.2 }}
-            >
-              <span className="relative z-10">Featured Projects</span>
-              <motion.span
-                className="absolute -bottom-1 left-0 h-1 bg-blue-500 rounded-full"
-                initial={{ width: 0 }}
-                whileInView={{ width: "100%" }}
-                transition={{ duration: 0.8, delay: 0.6 }}
-              />
-            </motion.h2>
-            <motion.p
-              className="text-gray-300 max-w-2xl text-sm sm:text-base"
-              initial={{ opacity: 0, y: -20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.3 }}
-            >
-              A showcase of my recent work, featuring web applications and
-              software solutions built with modern technologies and best
-              practices.
-            </motion.p>
+            <div className="inline-flex items-center gap-1.5 px-3 py-1 mb-3 rounded-full bg-blue-500/10 border border-blue-500/20 text-xs font-semibold text-blue-400 tracking-wider uppercase">
+              <Sparkles size={12} />
+              Portfolio Showcase
+            </div>
+            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight mb-3">
+              Featured{" "}
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-indigo-400">
+                Projects
+              </span>
+            </h2>
+            <p className="text-neutral-400 max-w-2xl text-sm sm:text-base leading-relaxed">
+              Full-stack platforms, scalable backends, real-time dispatch systems, and IoT solutions built for real-world reliability.
+            </p>
           </div>
 
-          {/* Premium Filter Controls */}
+          {/* Filter Pills */}
           <div className="flex flex-wrap gap-2 shrink-0">
             {categories.map((cat) => (
               <button
-                key={cat}
-                onClick={() => setFilter(cat)}
-                className={`px-3 py-1.5 rounded-full text-xs font-semibold transition-all ${
-                  filter === cat
-                    ? "bg-blue-600 text-white border-transparent shadow-lg shadow-blue-500/20"
-                    : "bg-slate-800 text-gray-400 hover:text-white border border-white/5"
+                key={cat.label}
+                onClick={() => setFilter(cat.label)}
+                className={`px-3.5 py-1.5 rounded-xl text-xs font-semibold transition-all cursor-pointer ${
+                  filter === cat.label
+                    ? "bg-blue-600 text-white shadow-lg shadow-blue-600/20 border border-blue-500/40"
+                    : "bg-neutral-900/80 text-neutral-400 hover:text-white hover:bg-neutral-800 border border-neutral-800"
                 }`}
               >
-                {cat}
+                {cat.label}
               </button>
             ))}
           </div>
-        </motion.div>
+        </div>
 
         <ProjectsData filter={filter} />
       </div>

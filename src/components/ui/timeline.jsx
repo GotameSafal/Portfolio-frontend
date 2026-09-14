@@ -1,7 +1,7 @@
 import { useScroll, useTransform, motion } from "framer-motion";
 import React, { useEffect, useRef, useState } from "react";
 
-export const Timeline = ({ data }) => {
+export const Timeline = ({ data = [] }) => {
   const ref = useRef(null);
   const containerRef = useRef(null);
   const [height, setHeight] = useState(0);
@@ -11,196 +11,69 @@ export const Timeline = ({ data }) => {
       const rect = ref.current.getBoundingClientRect();
       setHeight(rect.height);
     }
-  }, [ref]);
+  }, [data]);
 
   const { scrollYProgress } = useScroll({
     target: containerRef,
-    offset: ["start 10%", "end 50%"],
+    offset: ["start 20%", "end 70%"],
   });
 
   const heightTransform = useTransform(scrollYProgress, [0, 1], [0, height]);
   const opacityTransform = useTransform(scrollYProgress, [0, 0.1], [0, 1]);
 
-  // Animation variants
-  const containerVariants = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: {
-        staggerChildren: 0.2,
-        delayChildren: 0.1,
-      },
-    },
-  };
-
-  const itemVariants = {
-    hidden: { opacity: 0, x: -20 },
-    visible: {
-      opacity: 1,
-      x: 0,
-      transition: {
-        type: "spring",
-        stiffness: 100,
-        damping: 12,
-      },
-    },
-  };
-
-  const circleVariants = {
-    hidden: { scale: 0 },
-    visible: {
-      scale: 1,
-      transition: {
-        type: "spring",
-        stiffness: 300,
-        damping: 15,
-      },
-    },
-  };
-
   return (
-    <div className="w-full font-sans md:px-10" ref={containerRef}>
-      <motion.div
+    <div className="w-full font-sans" ref={containerRef}>
+      <div
         ref={ref}
-        className="relative max-w-7xl pt-8 mx-auto pb-20"
-        variants={containerVariants}
-        initial="hidden"
-        whileInView="visible"
-        viewport={{ once: true, amount: 0.1 }}
+        className="relative max-w-5xl mx-auto pt-4 pb-12"
       >
         {data.map((item, index) => (
-          <motion.div
+          <div
             key={index}
-            className="flex justify-start md:gap-10"
-            variants={itemVariants}
+            className="flex flex-col md:flex-row justify-start pt-6 md:pt-12 md:gap-8 group"
           >
-            <div className="sticky flex flex-col md:flex-row z-40 items-center top-40 self-start max-w-xs lg:max-w-sm md:w-full">
-              <motion.div
-                className="h-10 absolute left-3 md:left-3 w-10 rounded-full bg-white dark:bg-black flex items-center justify-center"
-                variants={circleVariants}
-                whileHover={{ scale: 1.1 }}
-              >
-                <motion.div
-                  className="h-4 w-4 rounded-full bg-neutral-200 dark:bg-neutral-800 border border-neutral-300 dark:border-neutral-700 p-2"
-                  animate={{
-                    boxShadow: [
-                      "0 0 0 rgba(59, 130, 246, 0)",
-                      "0 0 8px rgba(59, 130, 246, 0.5)",
-                      "0 0 0 rgba(59, 130, 246, 0)",
-                    ],
-                  }}
-                  transition={{
-                    duration: 2,
-                    repeat: Infinity,
-                    repeatType: "loop",
-                  }}
-                />
-              </motion.div>
+            {/* Left Column (Timeline Node & Meta) */}
+            <div className="sticky flex items-center md:flex-col md:items-start z-30 top-36 self-start md:w-56 lg:w-64 shrink-0 pl-12 md:pl-10 mb-4 md:mb-0">
+              {/* Timeline Indicator Node */}
+              <div className="h-9 w-9 absolute left-0 md:left-0 rounded-full bg-neutral-950 border border-neutral-800 flex items-center justify-center shadow-lg group-hover:border-blue-500/60 transition-colors duration-300">
+                <div className="h-3.5 w-3.5 rounded-full bg-blue-500/80 group-hover:bg-blue-400 group-hover:scale-125 transition-all duration-300 shadow-[0_0_10px_rgba(59,130,246,0.6)]" />
+              </div>
 
-              <motion.div
-                className="hidden md:block text-xl md:pl-20 text-neutral-500 dark:text-neutral-500"
-                variants={itemVariants}
-              >
-                <motion.p
-                  className="md:text-3xl text-xl font-bold text-gray-100"
-                  whileHover={{ color: "#60a5fa" }}
-                  transition={{ duration: 0.2 }}
-                >
+              {/* Date & Period Label */}
+              <div className="flex flex-col">
+                <span className="text-xs uppercase font-bold tracking-wider text-blue-400/90 mb-0.5">
                   {item.date}
-                </motion.p>
-                <motion.p
-                  className="md:text-2xl text-lg font-semibold text-gray-400"
-                  whileHover={{ color: "#93c5fd" }}
-                  transition={{ duration: 0.2 }}
-                >
-                  {item.job}
-                </motion.p>
-                <motion.p
-                  className="md:text-2xl text-lg font-semibold text-gray-400"
-                  whileHover={{ color: "#93c5fd" }}
-                  transition={{ duration: 0.2 }}
-                >
+                </span>
+                <span className="text-base font-semibold text-neutral-200 group-hover:text-white transition-colors">
                   {item.title}
-                </motion.p>
-              </motion.div>
+                </span>
+                <span className="text-xs text-neutral-400">
+                  {item.job}
+                </span>
+              </div>
             </div>
 
-            <motion.div
-              className="relative pl-20 pr-4 md:pl-4 w-full"
-              variants={itemVariants}
-              whileHover={{
-                x: 5,
-                transition: { duration: 0.2 },
-              }}
-            >
-              <motion.div
-                className="block md:hidden text-xl text-neutral-500 dark:text-neutral-500"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ delay: 0.3 }}
-              >
-                <motion.p
-                  className="md:text-3xl text-xl font-bold text-gray-100"
-                  whileHover={{ color: "#60a5fa" }}
-                >
-                  {item.date}
-                </motion.p>
-                <motion.p
-                  className="md:text-2xl text-lg font-semibold text-gray-400"
-                  whileHover={{ color: "#93c5fd" }}
-                >
-                  {item.job}
-                </motion.p>
-                <motion.p
-                  className="md:text-2xl text-lg font-semibold text-gray-400"
-                  whileHover={{ color: "#93c5fd" }}
-                >
-                  {item.title}
-                </motion.p>
-              </motion.div>
-
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5, delay: 0.2 }}
-                className="mt-4 text-gray-50"
-              >
-                {item.content}
-              </motion.div>
-            </motion.div>
-          </motion.div>
+            {/* Right Column (Card Content) */}
+            <div className="relative pl-12 md:pl-0 pr-2 md:pr-4 w-full">
+              {item.content}
+            </div>
+          </div>
         ))}
 
-        <motion.div
-          style={{
-            height: height + "px",
-          }}
-          className="absolute md:left-8 left-8 top-0 overflow-hidden w-[2px] bg-[linear-gradient(to_bottom,var(--tw-gradient-stops))] from-transparent from-[0%] via-neutral-200 dark:via-neutral-700 to-transparent to-[99%] [mask-image:linear-gradient(to_bottom,transparent_0%,black_10%,black_90%,transparent_100%)]"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 1 }}
+        {/* Dynamic Vertical Scroll Line */}
+        <div
+          style={{ height: height + "px" }}
+          className="absolute left-4 md:left-4 top-0 overflow-hidden w-[2px] bg-gradient-to-b from-neutral-800 via-neutral-800/80 to-transparent [mask-image:linear-gradient(to_bottom,transparent_0%,black_5%,black_95%,transparent_100%)] pointer-events-none"
         >
           <motion.div
             style={{
               height: heightTransform,
               opacity: opacityTransform,
             }}
-            className="absolute inset-x-0 top-0 w-[2px] bg-gradient-to-t from-purple-500 via-blue-500 to-transparent from-[0%] via-[10%] rounded-full"
-            animate={{
-              boxShadow: [
-                "0 0 2px rgba(59, 130, 246, 0.3)",
-                "0 0 8px rgba(59, 130, 246, 0.6)",
-                "0 0 2px rgba(59, 130, 246, 0.3)",
-              ],
-            }}
-            transition={{
-              duration: 2,
-              repeat: Infinity,
-              repeatType: "loop",
-            }}
+            className="absolute inset-x-0 top-0 w-[2px] bg-gradient-to-b from-blue-500 via-indigo-500 to-purple-500 rounded-full shadow-[0_0_12px_rgba(59,130,246,0.8)]"
           />
-        </motion.div>
-      </motion.div>
+        </div>
+      </div>
     </div>
   );
 };

@@ -15,4 +15,15 @@ export default defineConfig({
       "@/assets": path.resolve("./src/assets"),
     },
   },
+  build: {
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          "vendor-react": ["react", "react-dom", "react-router-dom"],
+          "vendor-animations": ["framer-motion", "gsap"],
+          "vendor-icons": ["lucide-react", "@tabler/icons-react", "react-icons"],
+        },
+      },
+    },
+  },
 });

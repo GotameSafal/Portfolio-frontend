@@ -1,117 +1,134 @@
 import { motion } from "framer-motion";
-import { Suspense } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { getWorkplaces } from "@/lib/api";
 import { get } from "lodash";
 import { Timeline } from "@/components/ui/timeline";
+import { Briefcase, Calendar, CheckCircle2, Building2 } from "lucide-react";
 
-// ── Shared animation variants ────────────────────────────────────────────────
-const gridVariants = {
-  hidden: { opacity: 0 },
-  show: { opacity: 1, transition: { staggerChildren: 0.1 } },
-};
-
-const imageItemVariants = {
-  hidden: { opacity: 0, scale: 0.8 },
-  show: {
-    opacity: 1,
-    scale: 1,
-    transition: { type: "spring", stiffness: 100 },
-  },
-};
-
-const PLACEHOLDER_IMAGES = [
-  "https://assets.aceternity.com/templates/startup-1.webp",
-  "https://assets.aceternity.com/templates/startup-2.webp",
-  "https://assets.aceternity.com/templates/startup-3.webp",
-  "https://assets.aceternity.com/templates/startup-4.webp",
-];
-
-// ── Reusable image grid ──────────────────────────────────────────────────────
+// ── Image Gallery (Only rendered if authentic images are provided) ────────────
 const WorkplaceImageGrid = ({ images = [] }) => {
-  const sources = images.length > 0 ? images : PLACEHOLDER_IMAGES;
+  if (!images || images.length === 0) return null;
 
   return (
-    <motion.div
-      className="grid grid-cols-2 gap-4"
-      variants={gridVariants}
-      initial="hidden"
-      whileInView="show"
-    >
-      {sources.map((src, index) => {
+    <div className="mt-5 grid grid-cols-2 sm:grid-cols-3 gap-3">
+      {images.map((src, index) => {
         const imgSrc = typeof src === "string" ? src : src.url;
         return (
-          <motion.div
+          <a
             key={index}
-            variants={imageItemVariants}
-            whileHover={{
-              scale: 1.05,
-              boxShadow: "0 10px 30px rgba(0,0,0,0.2)",
-            }}
+            href={imgSrc}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="group relative block overflow-hidden rounded-xl border border-neutral-800 bg-neutral-950/50 hover:border-neutral-700 transition-colors"
           >
             <img
               src={imgSrc}
-              alt="workplace screenshot"
-              width={500}
-              height={500}
-              className="h-20 w-full rounded-lg object-cover shadow-[0_0_24px_rgba(34,_42,_53,_0.06),_0_1px_1px_rgba(0,_0,_0,_0.05),_0_0_0_1px_rgba(34,_42,_53,_0.04),_0_0_4px_rgba(34,_42,_53,_0.08),_0_16px_68px_rgba(47,_48,_55,_0.05),_0_1px_0_rgba(255,_255,_255,_0.1)_inset] md:h-44 lg:h-60 transition-all duration-300"
+              alt="Project screenshot"
+              loading="lazy"
+              className="h-28 sm:h-36 w-full object-cover transition-transform duration-300 group-hover:scale-105"
             />
-          </motion.div>
+            <div className="absolute inset-0 bg-neutral-950/0 group-hover:bg-neutral-950/30 transition-colors" />
+          </a>
         );
       })}
-    </motion.div>
+    </div>
   );
 };
 
-// ── Single timeline entry content ────────────────────────────────────────────
-const WorkplaceContent = ({ description, images }) => {
-  const renderDescription = () => {
+// ── Single timeline entry card ───────────────────────────────────────────────
+const WorkplaceContent = ({
+  company,
+  position,
+  duration,
+  description,
+  technologies = [],
+  images = [],
+}) => {
+  const isCurrent = duration.toLowerCase().includes("present");
+
+  // Parse responsibilities or description
+  const bulletPoints = (() => {
     if (Array.isArray(description)) {
-      return (
-        <ul className="mb-8 list-disc list-inside space-y-1 text-xs font-normal text-neutral-300 md:text-sm dark:text-neutral-200">
-          {description.map((item, idx) => (
-            <li key={idx} className="leading-relaxed pl-1">{item}</li>
-          ))}
-        </ul>
-      );
+      return description.filter(Boolean);
     }
-    
     if (typeof description === "string") {
-      // Split by newlines or bullet characters if present
       const lines = description
         .split(/\n|●/)
-        .map(line => line.trim())
-        .filter(line => line.length > 0);
-
-      if (lines.length > 1) {
-        return (
-          <ul className="mb-8 list-disc list-inside space-y-1 text-xs font-normal text-neutral-300 md:text-sm dark:text-neutral-200">
-            {lines.map((item, idx) => (
-              <li key={idx} className="leading-relaxed pl-1">{item}</li>
-            ))}
-          </ul>
-        );
-      }
-
-      return (
-        <p className="mb-8 text-xs font-normal text-neutral-300 md:text-sm dark:text-neutral-200 leading-relaxed">
-          {description}
-        </p>
-      );
+        .map((l) => l.trim())
+        .filter((l) => l.length > 0);
+      return lines;
     }
-    
-    return null;
-  };
+    return [];
+  })();
 
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.5 }}
-    >
-      {renderDescription()}
+    <div className="w-full rounded-2xl border border-neutral-800/80 bg-neutral-900/60 p-5 md:p-7 backdrop-blur-md shadow-xl transition-all duration-300 hover:border-neutral-700 hover:shadow-2xl">
+      {/* Top Header inside Card */}
+      <div className="flex flex-wrap items-start justify-between gap-3 border-b border-neutral-800/80 pb-4 mb-5">
+        <div>
+          <div className="flex items-center gap-2 mb-1">
+            <span className="p-1.5 rounded-lg bg-blue-500/10 text-blue-400 border border-blue-500/20">
+              <Briefcase className="w-4 h-4" />
+            </span>
+            <h3 className="text-xl md:text-2xl font-bold tracking-tight text-white">
+              {position}
+            </h3>
+          </div>
+          <div className="flex items-center gap-2 text-sm font-medium text-neutral-400">
+            <Building2 className="w-3.5 h-3.5 text-neutral-500" />
+            <span>{company}</span>
+          </div>
+        </div>
+
+        {/* Status / Duration Pill */}
+        <div className="flex items-center gap-2">
+          {isCurrent && (
+            <span className="inline-flex items-center gap-1.5 rounded-full bg-emerald-500/10 px-2.5 py-1 text-xs font-medium text-emerald-400 border border-emerald-500/20">
+              <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 animate-pulse" />
+              Current
+            </span>
+          )}
+          <span className="inline-flex items-center gap-1.5 rounded-full bg-neutral-800/70 px-3 py-1 text-xs font-medium text-neutral-300 border border-neutral-700/60">
+            <Calendar className="w-3 h-3 text-neutral-400" />
+            {duration}
+          </span>
+        </div>
+      </div>
+
+      {/* Responsibilities list */}
+      {bulletPoints.length > 0 && (
+        <ul className="space-y-2.5 mb-6 text-sm text-neutral-300">
+          {bulletPoints.map((item, idx) => (
+            <li key={idx} className="flex items-start gap-2.5 leading-relaxed">
+              <CheckCircle2 className="w-4 h-4 text-blue-400/80 mt-0.5 shrink-0" />
+              <span>{item}</span>
+            </li>
+          ))}
+        </ul>
+      )}
+
+      {/* Tech Stack Chips */}
+      {technologies.length > 0 && (
+        <div className="pt-2">
+          <p className="text-xs uppercase tracking-wider font-semibold text-neutral-500 mb-2.5">
+            Core Technologies & Tools
+          </p>
+          <div className="flex flex-wrap gap-2">
+            {technologies.map((tech, idx) => (
+              <span
+                key={idx}
+                className="inline-flex items-center rounded-lg bg-neutral-800/90 px-2.5 py-1 text-xs font-medium text-neutral-300 border border-neutral-700/60 hover:border-blue-500/50 hover:text-blue-300 hover:bg-neutral-800 transition-colors"
+              >
+                {tech}
+              </span>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {/* Real project/workplace screenshots if available */}
       {images && images.length > 0 && <WorkplaceImageGrid images={images} />}
-    </motion.div>
+    </div>
   );
 };
 
@@ -123,14 +140,27 @@ const fallbackData = [
     job: "Full Stack Developer",
     content: (
       <WorkplaceContent
+        company="Web Studio Nepal"
+        position="Full Stack Developer"
+        duration="Jan 2024 – Present"
         description={[
-          "Develop production web applications using React, Next.js, TypeScript, Node.js, Express.js, and MongoDB.",
-          "Collaborate with designers and backend engineers to deliver responsive, production-ready software.",
-          "Design reusable UI components and modular application structures to improve maintainability.",
-          "Integrate REST APIs and third-party services into client applications.",
-          "Optimize application performance, accessibility, responsiveness, and SEO.",
-          "Participate in testing, debugging, deployment, and Git-based collaborative development.",
-          "Contributed to projects across e-commerce, healthcare, restaurant management, education, and enterprise domains."
+          "Architect and build production web applications using React, Next.js, TypeScript, Node.js, Express.js, and MongoDB.",
+          "Collaborate with cross-functional design and engineering teams to deliver responsive, performant software.",
+          "Design reusable UI design systems and modular architectures to scale development velocity.",
+          "Integrate secure REST APIs, third-party services, and real-time communication modules.",
+          "Optimize Core Web Vitals, application latency, accessibility (WCAG), and responsive ergonomics.",
+          "Deliver projects across e-commerce, healthcare, hospitality, and enterprise domains.",
+        ]}
+        technologies={[
+          "React",
+          "Next.js",
+          "TypeScript",
+          "Node.js",
+          "Express.js",
+          "MongoDB",
+          "Tailwind CSS",
+          "Redux Toolkit",
+          "Socket.IO",
         ]}
         images={[]}
       />
@@ -142,10 +172,20 @@ const fallbackData = [
     job: "Security Analyst",
     content: (
       <WorkplaceContent
+        company="Raechal Enterprise"
+        position="Security Analyst"
+        duration="Aug 2023 – Jan 2024"
         description={[
-          "Performed security monitoring and basic vulnerability assessments.",
-          "Worked with developers to encourage secure coding practices.",
-          "Supported incident monitoring and documentation."
+          "Conducted systematic security monitoring and baseline vulnerability assessments across web applications.",
+          "Partnered with development teams to review code and promote OWASP Top 10 secure coding principles.",
+          "Streamlined incident tracking, security audit reporting, and internal vulnerability documentation.",
+        ]}
+        technologies={[
+          "Linux",
+          "Security Auditing",
+          "Vulnerability Assessment",
+          "OWASP",
+          "Documentation",
         ]}
         images={[]}
       />
@@ -159,7 +199,7 @@ const WorkplaceData = () => {
     queryKey: ["workplaces"],
     queryFn: getWorkplaces,
     staleTime: 1000 * 60 * 5,
-    retry: false, // Don't block screen on failure
+    retry: false,
   });
 
   if (isLoading) {
@@ -177,11 +217,15 @@ const WorkplaceData = () => {
           job: wp.position || "Position",
           content: (
             <WorkplaceContent
+              company={wp.company || "Company"}
+              position={wp.position || "Position"}
+              duration={wp.duration || "Present"}
               description={
                 wp.responsibilities && wp.responsibilities.length > 0
                   ? wp.responsibilities
-                  : wp.description || "No description available"
+                  : wp.description || ""
               }
+              technologies={get(wp, "technologies", [])}
               images={get(wp, "images", [])}
             />
           ),
@@ -192,64 +236,46 @@ const WorkplaceData = () => {
 
 // ── Loading skeleton ─────────────────────────────────────────────────────────
 const WorkplaceLoading = () => (
-  <div className="flex items-center justify-center w-full h-64">
-    <div className="flex flex-col items-center space-y-4">
-      <div className="w-12 h-12 border-t-2 border-b-2 border-blue-500 rounded-full animate-spin" />
-      <p className="text-xl font-medium text-gray-200">
-        Loading work experience...
-      </p>
-    </div>
+  <div className="flex flex-col items-center justify-center w-full py-16 space-y-4">
+    <div className="w-10 h-10 border-2 border-neutral-700 border-t-blue-500 rounded-full animate-spin" />
+    <p className="text-sm font-medium text-neutral-400 tracking-wide">
+      Loading career experience...
+    </p>
   </div>
 );
 
 // ── Section root ─────────────────────────────────────────────────────────────
 const Workplace = () => (
-  <section className="relative bg-transparent py-6 text-white overflow-hidden">
-    {/* Ambient glows */}
-    <motion.div
-      className="absolute top-20 right-20 w-64 h-64 bg-blue-500/5 rounded-full blur-3xl"
-      animate={{ scale: [1, 1.2, 1], opacity: [0.1, 0.15, 0.1] }}
-      transition={{ repeat: Infinity, duration: 8, ease: "easeInOut" }}
-    />
-    <motion.div
-      className="absolute bottom-20 left-20 w-64 h-64 bg-purple-500/5 rounded-full blur-3xl"
-      animate={{ scale: [1, 1.1, 1], opacity: [0.1, 0.15, 0.1] }}
-      transition={{ repeat: Infinity, duration: 10, ease: "easeInOut", delay: 1 }}
-    />
+  <section
+    id="experience"
+    className="relative bg-transparent py-16 text-white overflow-hidden"
+  >
+    {/* Ambient Glows */}
+    <div className="pointer-events-none absolute top-1/4 right-0 w-96 h-96 bg-blue-600/10 rounded-full blur-3xl -z-10" />
+    <div className="pointer-events-none absolute bottom-1/4 left-0 w-96 h-96 bg-indigo-600/10 rounded-full blur-3xl -z-10" />
 
-    <div className="max-w-screen-lg relative h-full mx-auto p-4 md:p-8">
+    <div className="max-w-screen-xl relative h-full mx-auto px-4 md:px-8">
       <motion.div
-        initial={{ opacity: 0, y: -20 }}
+        initial={{ opacity: 0, y: 20 }}
         whileInView={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.6 }}
-        className="mb-12 text-center"
+        viewport={{ once: true }}
+        transition={{ duration: 0.5 }}
+        className="mb-14 text-center"
       >
-        <motion.h2
-          className="text-3xl md:text-4xl font-bold mb-4"
-          initial={{ opacity: 0, y: -20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.2 }}
-        >
-          My Professional <span className="text-blue-400">Journey</span>
-        </motion.h2>
-        <motion.p
-          className="text-gray-300 max-w-2xl mx-auto"
-          initial={{ opacity: 0, y: -20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.3 }}
-        >
-          Explore my career path and the projects I've worked on throughout my
-          professional experience.
-        </motion.p>
+        <div className="inline-flex items-center gap-2 px-3 py-1 mb-4 rounded-full bg-blue-500/10 border border-blue-500/20 text-xs font-semibold text-blue-400 tracking-wider uppercase">
+          Career Milestones
+        </div>
+        <h2 className="text-3xl md:text-4xl lg:text-5xl font-extrabold tracking-tight mb-4">
+          Professional <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-indigo-400">Experience</span>
+        </h2>
+        <p className="text-neutral-400 max-w-2xl mx-auto text-sm md:text-base leading-relaxed">
+          A track record of crafting robust full-stack applications, scaling web systems, and upholding software security.
+        </p>
       </motion.div>
 
-      <motion.div
-        initial={{ opacity: 0 }}
-        whileInView={{ opacity: 1 }}
-        transition={{ duration: 0.8 }}
-      >
+      <div>
         <WorkplaceData />
-      </motion.div>
+      </div>
     </div>
   </section>
 );
