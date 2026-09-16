@@ -20,28 +20,28 @@ import {
   SiMui,
 } from "react-icons/si";
 import { GrMysql } from "react-icons/gr";
+import { Layers } from "lucide-react";
 
 // Map skill name -> icon component + color
 const skillConfig = [
-  { key: "html", icon: FaHtml5, color: "#E34F26" },
-  { key: "css", icon: FaCss3Alt, color: "#1572B6" },
-  { key: "js", icon: SiJavascript, color: "#F7DF1E" },
-  { key: "ts", icon: SiTypescript, color: "#3178C6" },
-  { key: "react", icon: FaReact, color: "#61DAFB" },
-  { key: "nextjs", icon: SiNextdotjs, color: "#ffffff" },
-  { key: "nodejs", icon: FaNodeJs, color: "#339933" },
-  { key: "express", icon: SiExpress, color: "#ffffff" },
-  { key: "mongodb", icon: SiMongodb, color: "#47A248" },
-  { key: "mysql", icon: GrMysql, color: "#00758F" },
-  { key: "github", icon: FaGithub, color: "#ffffff" },
-  { key: "docker", icon: FaDocker, color: "#2496ED" },
-  { key: "firebase", icon: SiFirebase, color: "#FFCA28" },
-  { key: "tailwind", icon: SiTailwindcss, color: "#06B6D4" },
-  { key: "mui", icon: SiMui, color: "#007FFF" },
+  { key: "react", name: "React", icon: FaReact, color: "#61DAFB", desc: "Component-driven interfaces & state architectures" },
+  { key: "nextjs", name: "Next.js", icon: SiNextdotjs, color: "#ffffff", desc: "SSR, ISR, Server Actions, & production routing" },
+  { key: "ts", name: "TypeScript", icon: SiTypescript, color: "#3178C6", desc: "Strict end-to-end type safety across client & server" },
+  { key: "js", name: "JavaScript (ES6+)", icon: SiJavascript, color: "#F7DF1E", desc: "Core asynchronous programming & DOM manipulation" },
+  { key: "nodejs", name: "Node.js", icon: FaNodeJs, color: "#339933", desc: "High-throughput asynchronous event-driven runtimes" },
+  { key: "express", name: "Express.js", icon: SiExpress, color: "#ffffff", desc: "RESTful endpoints, middleware chains, & security layers" },
+  { key: "mongodb", name: "MongoDB", icon: SiMongodb, color: "#47A248", desc: "NoSQL schema modeling, aggregation pipelines, & indexing" },
+  { key: "mysql", name: "MySQL", icon: GrMysql, color: "#00758F", desc: "Relational database structuring & ACID transactions" },
+  { key: "docker", name: "Docker", icon: FaDocker, color: "#2496ED", desc: "Containerized reproducible build & deployment environments" },
+  { key: "github", name: "GitHub & CI/CD", icon: FaGithub, color: "#ffffff", desc: "Collaborative Git workflows, automated pipelines, & PR audits" },
+  { key: "tailwind", name: "Tailwind CSS", icon: SiTailwindcss, color: "#06B6D4", desc: "Utility-first responsive layouts & design systems" },
+  { key: "firebase", name: "Firebase", icon: SiFirebase, color: "#FFCA28", desc: "Cloud auth, storage buckets, & real-time telemetry" },
 ];
 
 export const SkillsSection = () => {
   const [hoveredSkill, setHoveredSkill] = useState(null);
+
+  const activeSkillObj = skillConfig.find((s) => s.key === hoveredSkill);
 
   const icons = (size = 24, reverse = false) => {
     const list = reverse ? [...skillConfig].reverse() : skillConfig;
@@ -51,7 +51,7 @@ export const SkillsSection = () => {
         whileHover={{ scale: 1.25 }}
         onHoverStart={() => setHoveredSkill(key)}
         onHoverEnd={() => setHoveredSkill(null)}
-        className="cursor-pointer bg-slate-950/80 p-1.5 rounded-full border border-white/5 shadow-md flex items-center justify-center shrink-0"
+        className="cursor-pointer bg-neutral-950 p-2 rounded-xl border border-neutral-800 shadow-md flex items-center justify-center shrink-0 hover:border-blue-500/50 transition-colors"
       >
         <Icon size={size} color={color} />
       </motion.div>
@@ -59,82 +59,65 @@ export const SkillsSection = () => {
   };
 
   return (
-    <div className="col-span-1 sm:col-span-2 md:col-span-4 bg-slate-900/60 border border-white/5 backdrop-blur-md rounded-2xl relative overflow-hidden flex flex-col md:flex-row h-full min-h-[18rem] md:min-h-0">
-      {/* Background glow effects */}
-      <div className="absolute top-0 right-0 w-48 h-48 bg-blue-500/5 rounded-full blur-3xl pointer-events-none" />
-      <div className="absolute bottom-0 left-0 w-48 h-48 bg-purple-500/5 rounded-full blur-3xl pointer-events-none" />
+    <div className="w-full rounded-2xl bg-neutral-900/60 border border-neutral-800/80 hover:border-neutral-700/80 backdrop-blur-md relative overflow-hidden flex flex-col md:flex-row shadow-xl transition-all duration-300">
+      {/* Subtle background ambient lights */}
+      <div className="absolute top-0 right-0 w-80 h-80 bg-blue-500/5 rounded-full blur-3xl pointer-events-none" />
+      <div className="absolute bottom-0 left-0 w-80 h-80 bg-indigo-500/5 rounded-full blur-3xl pointer-events-none" />
 
-      {/* Content side */}
-      <motion.div
-        initial={{ opacity: 0, x: -15 }}
-        whileInView={{ opacity: 1, x: 0 }}
-        transition={{ duration: 0.5 }}
-        className="w-full md:w-1/2 text-white space-y-3 p-6 flex flex-col justify-between relative z-10"
-      >
-        <div className="space-y-2">
-          <h4 className="font-bold text-lg text-white">Tech Stack</h4>
-          <p className="text-xs text-gray-400 leading-relaxed">
-            I specialize in modern technologies and tools that enable the development of high-performance web applications.
+      {/* Content description side */}
+      <div className="w-full md:w-1/2 p-6 sm:p-8 flex flex-col justify-between relative z-10">
+        <div className="space-y-3">
+          <div className="flex items-center gap-2">
+            <span className="p-1.5 rounded-lg bg-indigo-500/10 text-indigo-400 border border-indigo-500/20">
+              <Layers className="w-4 h-4" />
+            </span>
+            <span className="text-xs font-semibold uppercase tracking-wider text-indigo-400">
+              Technical Arsenal
+            </span>
+          </div>
+
+          <h4 className="font-extrabold text-xl sm:text-2xl text-white">
+            Core Languages, Frameworks & Infrastructure
+          </h4>
+          <p className="text-xs sm:text-sm text-neutral-400 leading-relaxed">
+            Engineered with modern toolchains to ensure high velocity, type safety, low latency, and zero-compromise security.
           </p>
         </div>
 
         {/* Skill details box */}
-        <div className="h-16 flex items-center">
-          {hoveredSkill ? (
+        <div className="mt-6 pt-4 border-t border-neutral-800/80 min-h-[4.5rem] flex items-center">
+          {activeSkillObj ? (
             <motion.div
-              initial={{ opacity: 0, y: 5 }}
+              initial={{ opacity: 0, y: 4 }}
               animate={{ opacity: 1, y: 0 }}
-              className="w-full bg-white/5 backdrop-blur-xs px-3 py-2 rounded-xl border border-white/10"
+              className="w-full bg-neutral-950/80 p-3 rounded-xl border border-neutral-800"
             >
-              <h5 className="font-semibold text-xs text-blue-400 capitalize">
-                {hoveredSkill === "js"
-                  ? "JavaScript"
-                  : hoveredSkill === "ts"
-                  ? "TypeScript"
-                  : hoveredSkill === "nextjs"
-                  ? "Next.js"
-                  : hoveredSkill === "nodejs"
-                  ? "Node.js"
-                  : hoveredSkill === "mui"
-                  ? "Material UI"
-                  : hoveredSkill}
+              <h5 className="font-bold text-xs text-blue-400 flex items-center gap-2">
+                <span>{activeSkillObj.name}</span>
               </h5>
-              <p className="text-[10px] text-gray-300 truncate mt-0.5">
-                {hoveredSkill === "html" && "Semantic markup for structural content"}
-                {hoveredSkill === "css" && "Styling and layout with modern CSS"}
-                {hoveredSkill === "js" && "Dynamic client-side programming"}
-                {hoveredSkill === "ts" && "Type-safe JavaScript development"}
-                {hoveredSkill === "react" && "Component-based UI development"}
-                {hoveredSkill === "nextjs" && "React framework for production"}
-                {hoveredSkill === "nodejs" && "JavaScript runtime for backend"}
-                {hoveredSkill === "express" && "Web framework for Node.js"}
-                {hoveredSkill === "mongodb" && "NoSQL document database"}
-                {hoveredSkill === "mysql" && "Relational database management"}
-                {hoveredSkill === "github" && "Version control and collaboration"}
-                {hoveredSkill === "docker" && "Containerization for deployment"}
-                {hoveredSkill === "firebase" && "App development platform"}
-                {hoveredSkill === "tailwind" && "Utility-first CSS framework"}
-                {hoveredSkill === "mui" && "React UI component library"}
+              <p className="text-xs text-neutral-300 mt-1">
+                {activeSkillObj.desc}
               </p>
             </motion.div>
           ) : (
-            <p className="text-[10px] text-gray-500 italic">
-              Hover over any icon to view details
-            </p>
+            <div className="flex items-center gap-2 text-xs text-neutral-500">
+              <span className="w-2 h-2 rounded-full bg-neutral-700 animate-pulse" />
+              <span>Hover over any rotating technology to inspect capability</span>
+            </div>
           )}
         </div>
-      </motion.div>
+      </div>
 
-      {/* Orbiting icons side */}
-      <div className="w-full md:w-1/2 relative h-48 md:h-full overflow-hidden flex items-center justify-center min-h-[12rem] z-10">
+      {/* Orbiting visualizer side */}
+      <div className="w-full md:w-1/2 relative h-64 md:h-auto overflow-hidden flex items-center justify-center min-h-[16rem] z-10 bg-neutral-950/20 border-t md:border-t-0 md:border-l border-neutral-800/60">
         <div className="absolute inset-0 flex items-center justify-center scale-95">
           {/* Inner ring */}
-          <OrbitingCircles iconSize={26} radius={50} speed={1.5}>
+          <OrbitingCircles iconSize={28} radius={55} speed={1.5}>
             {icons(18)}
           </OrbitingCircles>
 
           {/* Outer ring */}
-          <OrbitingCircles iconSize={26} radius={90} reverse speed={1.2}>
+          <OrbitingCircles iconSize={28} radius={105} reverse speed={1.2}>
             {icons(18, true)}
           </OrbitingCircles>
         </div>
@@ -142,3 +125,5 @@ export const SkillsSection = () => {
     </div>
   );
 };
+
+export default SkillsSection;
