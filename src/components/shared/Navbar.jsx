@@ -26,6 +26,7 @@ const Navbar = ({ onToggleConsole }) => {
       if (rafId.current !== null) return;
       rafId.current = requestAnimationFrame(() => {
         const currentY = window.scrollY;
+        console.log("scrollY:", currentY);
         // Hysteresis prevents flickering when hovering around the threshold
         setScrolled((prev) => {
           if (!prev && currentY > 30) return true;
@@ -102,12 +103,14 @@ const Navbar = ({ onToggleConsole }) => {
     },
   };
 
+  console.log('scrolled', scrolled)
   return (
     <nav
-      className={`sticky top-0 z-[99999] text-white will-change-transform border-b ${scrolled
-          ? "bg-neutral-950/85 backdrop-blur-md border-neutral-800/80 shadow-lg shadow-black/20"
-          : "bg-neutral-950/40 backdrop-blur-sm border-transparent"
+      className={`sticky top-0 z-[99999] text-white will-change-transform border-b transition-all duration-200 ${scrolled
+        ? "bg-transparent backdrop-blur-md border-transparent shadow-none"
+        : "bg-slate-950 border-neutral-800/80 shadow-lg shadow-black/20"
         }`}
+
       style={{
         transitionProperty: "background-color, border-color, box-shadow",
         transitionDuration: "200ms",
@@ -129,7 +132,7 @@ const Navbar = ({ onToggleConsole }) => {
             alt="Safal Gotame logo"
           />
           <span className="hidden text-xl font-bold tracking-tight text-white lg:block group-hover:text-blue-400 transition-colors">
-            Safal <span className="text-blue-400">Gotame</span>
+            Safal <span className="text-blue-400">Pariyar</span>
           </span>
         </Link>
 
@@ -144,8 +147,8 @@ const Navbar = ({ onToggleConsole }) => {
                   key={link.href}
                   to={link.href}
                   className={`flex items-center px-3 py-1.5 rounded-lg text-sm font-medium transition-colors ${isActive
-                      ? "text-blue-400 bg-blue-500/10 border border-blue-500/20"
-                      : "text-neutral-300 hover:text-white hover:bg-neutral-800/60"
+                    ? "text-blue-400 bg-blue-500/10 border border-blue-500/20"
+                    : "text-neutral-300 hover:text-white hover:bg-neutral-800/60"
                     }`}
                 >
                   {link.icon}
@@ -156,8 +159,8 @@ const Navbar = ({ onToggleConsole }) => {
                   key={link.href}
                   href={`#${link.href}`}
                   className={`flex items-center px-3 py-1.5 rounded-lg text-sm font-medium transition-colors ${isActive
-                      ? "text-blue-400 bg-blue-500/10 border border-blue-500/20"
-                      : "text-neutral-300 hover:text-white hover:bg-neutral-800/60"
+                    ? "text-blue-400 bg-blue-500/10 border border-blue-500/20"
+                    : "text-neutral-300 hover:text-white hover:bg-neutral-800/60"
                     }`}
                 >
                   {link.icon}
@@ -225,8 +228,8 @@ const Navbar = ({ onToggleConsole }) => {
                         to={link.href}
                         onClick={toggleMenu}
                         className={`flex items-center px-3 py-2 rounded-lg text-sm font-medium transition-colors ${isActive
-                            ? "text-blue-400 bg-blue-500/10"
-                            : "text-neutral-300 hover:text-white"
+                          ? "text-blue-400 bg-blue-500/10"
+                          : "text-neutral-300 hover:text-white"
                           }`}
                       >
                         {link.icon}
@@ -237,8 +240,8 @@ const Navbar = ({ onToggleConsole }) => {
                         href={`#${link.href}`}
                         onClick={toggleMenu}
                         className={`flex items-center px-3 py-2 rounded-lg text-sm font-medium transition-colors ${isActive
-                            ? "text-blue-400 bg-blue-500/10"
-                            : "text-neutral-300 hover:text-white"
+                          ? "text-blue-400 bg-blue-500/10"
+                          : "text-neutral-300 hover:text-white"
                           }`}
                       >
                         {link.icon}
