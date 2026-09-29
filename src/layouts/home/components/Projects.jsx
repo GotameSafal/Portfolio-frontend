@@ -61,6 +61,19 @@ const fallbackProjects = [
     videoUrl: "https://res.cloudinary.com/dzat8mbl6/video/upload/v1789052206/omninode_squished_tg3thi.mp4",
     image: "https://images.unsplash.com/photo-1518770660439-4636190af475?q=80&w=800&auto=format&fit=crop",
   },
+  {
+    id: 4,
+    title: "PulseStack (Real-Time Observability & Telemetry)",
+    description:
+      "High-throughput real-time APM, error tracking, and telemetry analytics platform powered by ClickHouse, Fastify, and Next.js.",
+    detailedDescription:
+      "PROBLEM SOLVED: Modern microservices and distributed web apps suffer from fragmented monitoring — disjointed logging, slow analytics on high-cardinality event streams, and delayed incident alerting causing costly downtime.\n\nBUSINESS IMPACT & SOLUTION: Architected an enterprise-grade full-stack observability platform engineered for sub-second telemetry ingestion and analytics. Powered by a high-throughput Fastify API gateway, Redis stream buffering, ClickHouse columnar storage for billion-row queries, background worker alert/incident dispatching, and a reactive Next.js 16 analytics dashboard.",
+    technologies: ["Next.js", "TypeScript", "Fastify", "ClickHouse", "PostgreSQL", "Redis", "Docker", "Drizzle ORM", "Tailwind CSS"],
+    githubLink: "https://github.com/GotameSafal/PulseStack",
+    liveLink: "#",
+    videoUrl: "https://res.cloudinary.com/dzat8mbl6/video/upload/v1790669337/PSF-Final_blxnr9.mp4",
+    image: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?q=80&w=800&auto=format&fit=crop",
+  },
 ];
 
 // Reusable architecture node block
